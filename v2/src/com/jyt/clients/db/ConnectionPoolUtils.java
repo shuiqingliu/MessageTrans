@@ -19,6 +19,7 @@ public class ConnectionPoolUtils {
 					"com.mysql.jdbc.Driver",				 
 					"jdbc:mysql://47.95.194.24:3306/im?useUnicode=true&characterEncoding=utf-8",				 
 					"liunan", "123456");
+			
 			try {
 				poolInstance.createPool();
 			} catch (Exception e) {
