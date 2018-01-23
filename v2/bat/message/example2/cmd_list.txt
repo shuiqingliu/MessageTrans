@@ -1,0 +1,7 @@
+server java com.jyt.message.MessageServer 1099 test_server
+pause 5
+manager java com.jyt.message.example2.PieManager 127.0.0.1 test_server
+pause 1
+computer java com.jyt.message.example2.Computer 127.0.0.1 test_server
+pause 1
+task java com.jyt.message.example2.Task 127.0.0.1 test_server

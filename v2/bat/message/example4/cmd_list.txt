@@ -1,0 +1,8 @@
+server java com.jyt.message.MessageServer 1099 test_server
+pause 5
+manager java com.jyt.message.example4.MyManager 127.0.0.1 test_server
+pause 2
+washer java com.jyt.message.example4.Washer 127.0.0.1 test_server
+cooker java com.jyt.message.example4.Cooker 127.0.0.1 test_server
+leader java com.jyt.message.example4.Leader 127.0.0.1 test_server
+pause 1

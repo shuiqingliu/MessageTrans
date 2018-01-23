@@ -1,0 +1,42 @@
+package com.jyt.util;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import org.boris.expr.Expr;
+import org.boris.expr.ExprEvaluatable;
+import org.boris.expr.parser.ExprParser;
+import org.boris.expr.util.Exprs;
+import org.boris.expr.util.SimpleEvaluationContext;
+
+public class TestExpr4j {
+
+	/**
+	 * 
+	 * @param args
+	 * 
+	 */
+
+	public static void main(String[] args) {
+
+		SimpleEvaluationContext context = new SimpleEvaluationContext();
+		System.out.println("Expr Evaluator v1.0");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while (true) {
+			try {
+				System.out.print(">");
+				String line = br.readLine();
+				if (line == null)
+					break;
+				Expr e = ExprParser.parse(line);
+				Exprs.toUpperCase(e);
+				if (e instanceof ExprEvaluatable) {
+					e = ((ExprEvaluatable) e).evaluate(context);
+				}
+				System.out.println(e);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

@@ -1,0 +1,66 @@
+package com.jyt.util;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+public class MyBean {
+	
+	public static void copy(Object from_bean,Object to_bean,String[] attrs)
+	{
+		try{
+			
+			for(int i=0;i<attrs.length;i++)
+			{
+				String attr_name = attrs[i];
+				Object returnValue = BeanUtils.getProperty(from_bean, attr_name);
+				BeanUtils.setProperty(to_bean, attr_name, returnValue);
+				 
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		
+	}
+	
+	public static void clear(Object bean,String[] attrs)
+	{
+		try{
+			
+			for(int i=0;i<attrs.length;i++)
+			{
+				String attr_name = attrs[i];
+				BeanUtils.setProperty(bean, attr_name, "");
+				 
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		
+	}	
+	
+	public static void assign(Object bean,String[] attrs,String[] values)
+	{
+		try{
+			
+			for(int i=0;i<attrs.length;i++)
+			{
+				String attr_name = attrs[i];
+				String value = values[i];
+				BeanUtils.setProperty(bean, attr_name,value );
+				 
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		
+	}		
+
+}

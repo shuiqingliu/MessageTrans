@@ -1,0 +1,1 @@
+CLASSPATH=%CLASSPATH%;E:/suncore/amc/bin

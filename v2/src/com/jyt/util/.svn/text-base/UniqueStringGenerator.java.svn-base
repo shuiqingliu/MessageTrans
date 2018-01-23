@@ -1,0 +1,24 @@
+package com.jyt.util;
+
+public class UniqueStringGenerator {
+
+	private UniqueStringGenerator() {
+	}
+
+	public static synchronized String getUniqueString() {
+		if (generateCount > 99999)
+			generateCount = 0;
+		String uniqueNumber = Long.toString(System.currentTimeMillis())
+				+ Integer.toString(generateCount);
+		generateCount++;
+		return uniqueNumber;
+	}
+
+	private static int generateCount = 0;
+
+	public static void main(String[] args) {
+		for (int i = 0; i < 100; i++) {
+			System.out.println(getUniqueString());
+		}
+	}
+}

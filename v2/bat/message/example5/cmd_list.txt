@@ -1,0 +1,20 @@
+01.gbus java com.jyt.message.MessageServer 1099 gbus
+11.abus1 java com.jyt.message.MessageServer 1100 abus1
+21.abus2 java com.jyt.message.MessageServer 1101 abus2
+pause 5
+02.gmgr java com.jyt.message.example5.GMgr 127.0.0.1 gbus
+pause 1
+12.a1mgr java com.jyt.message.example5.AMgr 127.0.0.1 abus1
+22.a2mgr java com.jyt.message.example5.AMgr 127.0.0.1 abus2
+pause 1
+31.router_a1g java com.jyt.message.MessageRouter 127.0.0.1 abus1 127.0.0.1 gbus
+32.router_a2g java com.jyt.message.MessageRouter 127.0.0.1 abus2 127.0.0.1 gbus
+pause 1
+13.a1g java com.jyt.message.example5.EntityG 127.0.0.1 abus1
+23.a2g java com.jyt.message.example5.EntityG 127.0.0.1 abus2
+02.gg java com.jyt.message.example5.EntityG 127.0.0.1 gbus
+14.a1f java com.jyt.message.example5.EntityF 127.0.0.1 abus1
+24.a2f java com.jyt.message.example5.EntityF 127.0.0.1 abus2
+03.gf java com.jyt.message.example5.EntityF 127.0.0.1 gbus
+pause 1
+
