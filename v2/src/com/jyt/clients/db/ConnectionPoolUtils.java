@@ -17,7 +17,7 @@ public class ConnectionPoolUtils {
 		if(poolInstance == null) {
 			poolInstance = new ConnectionPool(					 
 					"com.mysql.jdbc.Driver",				 
-					"jdbc:mysql://47.95.194.24:3306/im?useUnicode=true&characterEncoding=utf-8",				 
+					"jdbc:mysql://47.95.194.24:3306/wetalk?useUnicode=true&characterEncoding=utf-8",				 
 					"liunan", "123456");
 			
 			try {

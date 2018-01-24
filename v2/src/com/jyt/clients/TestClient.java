@@ -54,7 +54,7 @@ public class TestClient extends MessageServerTcpClient{
 		
 		User user=new User();
 		user.setId("123");
-		user.setName("pw");
+		user.setName("liunan");
 		user.setPasswd("123");
 		bs = MySerializable.object_bytes(new Gson().toJson(user));
 		Message msg = new Message("sys_test","sys_login","login",bs);
