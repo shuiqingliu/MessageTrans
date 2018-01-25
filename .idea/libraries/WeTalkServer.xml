@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="WeTalkServer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
