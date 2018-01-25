@@ -31,26 +31,22 @@ public class ClientManager {
      **/
     public void sendMessage(String userName, String message) {
         try {
-            //将消息发送给除了自己的每一个客户端
-            for (int userIndex = 0; userIndex < clientList.size(); userIndex++) {
-                Socket socket = clientList.get(userName);
-                System.out.println(socket);
-                BufferedWriter writerMessage = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-                if (serverClosed(socket)) {
-                    clientList.remove(userIndex);
-                    continue;
-                } else if (!socket.equals(socket)) {
-                    writerMessage.write(message);
-                    writerMessage.newLine();
-                    writerMessage.flush();
-                }
+            //将消息发送给指定的客户端
+            Socket socket = clientList.get(userName);
+            System.out.println(socket);
+            BufferedWriter writerMessage = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+            if (!socket.equals(socket)) {
+                writerMessage.write(message);
+                writerMessage.newLine();
+                writerMessage.flush();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Boolean serverClosed(Socket socket) {
+    public Boolean serverClosed(Socket socket) {
         try {
             socket.sendUrgentData(0);
             return false;

@@ -18,6 +18,7 @@ public class MessageHandler implements Runnable{
     private DataInputStream clientData = null;
     private MessageForwarder forwarder;
     private MessageParser messageParser;
+    private MessageBean messageBean;
 
     public MessageHandler(Socket socket) {
         this.socket = socket;
@@ -34,44 +35,38 @@ public class MessageHandler implements Runnable{
             String socketLine = "";
             StringBuffer jsonData = null;
             jsonData = new StringBuffer(socketLine);
-            //socketLine = readerData.readLine();
-            jsonData.append(socketLine);
             //阻塞接收消息，直到消息处理完成。
             while ( (socketLine = readerData.readLine()) != null ){
+                jsonData.append(socketLine);
                 System.out.println("接收到的消息：" + socketLine);
                 //将 json 解析得到 MessageBean 对象
                 messageParser = new MessageParser();
-                MessageBean messageBean = messageParser.getMessageBean(socketLine);
-                //若为 login 类型的消息则创建连接
+                messageBean = messageParser.getMessageBean(socketLine);
+                //若为 login 类型的消息则创建连接,否则直接发送。
                 if (messageBean.getType().equals("login")){
                     //在服务器中注册该客户端
-                    this.startForwardThread(messageBean.getFrom(),"login");
+                    this.startForwardThread(messageBean.getFrom());
                     //将连接添加到 proxy server 的客户端维护 Map 中。
                     ClientManager.getClientManager().add(messageBean.getFrom(),socket);
+                    //TODO: send login message
                 }
-                //不是结束符消息就存储
-                if (!socketLine.equals("exit")){
-                    jsonData.append(socketLine);
-                }
-                //遇到结束符代表消息接收完成，进行消息处理
-                if (socketLine.equals("exit")) {
-                    System.out.println("Log1-Client 的消息:" + jsonData.toString());
-                    //创建线程准备发送消息。
-                    Message message = createMessage(jsonData.toString());
-                    //发送消息
-                   // Message message = createMessage(jsonData.toString());
-                    System.out.println("Log2:" + message.getContent());
-                    String content = (String) MySerializable.bytes_object(message.getContent());
-                    System.out.println("Log3:" + content);
-                   // forwarder.send(message);
-                    //ClientManager.getClientManager().sendMessage(socket,jsonData.toString());
-                    //将已存储的消息清空
-                    System.out.println("Log5:jsonData:" + jsonData.toString());
-                    jsonData = new StringBuffer("");
-                }
+                forwarder.send(createMessage(socketLine));
+                //打印发送的消息，并将暂存的消息置空
+                System.out.println("jsonData:" + jsonData.toString());
+                jsonData = new StringBuffer("");
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                ClientManager.getClientManager().clientList.remove(messageBean.getFrom());
+                readerData.close();
+                socket.close();
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -85,12 +80,12 @@ public class MessageHandler implements Runnable{
     }
 
     //开启转发消息线程来处理消息
-    private void startForwardThread(String clientName,String msgServerType){
+    private void startForwardThread(String clientName){
         Thread forwardThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 if (forwarder == null) {
-                    forwarder = new MessageForwarder("127.0.0.1", MessageConfig.server_name, 10001, clientName,msgServerType);
+                    forwarder = new MessageForwarder("127.0.0.1", MessageConfig.server_name, 10001, clientName);
                     forwarder.work();
                 }
             }
