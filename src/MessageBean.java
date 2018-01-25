@@ -4,18 +4,23 @@
 
 import javax.xml.crypto.Data;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Class MessageBean
  * 用来存储 json 解析出来的消息内容*/
-public class MessageBean implements Serializable{
+public class MessageBean{
 
     //message property
     private String type;
     private String from;
     private String to;
     private String content;
-    private Data   time;
+    private Date   time;
+
+    public MessageBean(){
+
+    }
 
     public String getType() {
         return type;
@@ -49,11 +54,11 @@ public class MessageBean implements Serializable{
         this.content = content;
     }
 
-    public Data getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Data time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 }

@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Created by qingliu on 1/24/18.
@@ -7,7 +8,9 @@ public class MessageParser {
     private Gson gson;
 
     public MessageParser() {
-        this.gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.gson = gsonBuilder.create();
     }
 
     /**
