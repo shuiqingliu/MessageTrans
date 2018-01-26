@@ -16,7 +16,7 @@ public class MessageHandler implements Runnable{
     private BufferedReader readerData = null;
     private BufferedWriter writerData = null;
     private DataInputStream clientData = null;
-    private MessageForwarder forwarder;
+    public MessageForwarder forwarder;
     private MessageParser messageParser;
     private MessageBean messageBean;
 
@@ -81,16 +81,10 @@ public class MessageHandler implements Runnable{
 
     //开启转发消息线程来处理消息
     private void startForwardThread(String clientName){
-        Thread forwardThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (forwarder == null) {
-                    forwarder = new MessageForwarder("127.0.0.1", MessageConfig.server_name, 10001, clientName);
-                    forwarder.work();
-                }
-            }
-        });
-        forwardThread.start();
+        if (forwarder == null) {
+            forwarder = new MessageForwarder("127.0.0.1", MessageConfig.server_name, 10001, clientName);
+            forwarder.work();
+        }
     }
 
     //根据 json 字符串来创建 Message 对象
@@ -101,6 +95,7 @@ public class MessageHandler implements Runnable{
         String to   = messageBean.getTo();
         String type = messageBean.getType();
         Message message = new Message(from,to,type,messageByte);
+        System.out.println(message);
         return message;
     }
 }

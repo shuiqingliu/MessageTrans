@@ -24,7 +24,7 @@ public class ClientManager {
     }
 
     /**
-     * 将消息发送给 Vector 中的客户端
+     * 将消息发送给 Map 中的客户端
      *
      * @param userName 接收消息的用户名，取自 Message Content
      * @param message      发送的消息
