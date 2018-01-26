@@ -1,5 +1,10 @@
 package com.jyt.clients;
 
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.jyt.clients.model.Group;
+import com.jyt.clients.service.GroupService;
 import com.jyt.message.Message;
 import com.jyt.message.MessageConfig;
 import com.jyt.message.MessageListener;
@@ -13,8 +18,9 @@ public class GroupClient extends MessageServerTcpClient {
 	public GroupClient(String server_ip, String server_name) {
 		super(server_ip, server_name, "sys_group");
 		addListener("createGroup", new ResponseListener(this));
-		addListener("pullMemberConf", new ResponseListener(this));
+		addListener("pullMember", new ResponseListener(this));
 		addListener("delMember", new ResponseListener(this));
+		addListener("quitGroup", new ResponseListener(this));
 		addListener("modifyGroupName", new ResponseListener(this));
 		addListener("groupMsg", new ResponseListener(this));
 	}
@@ -38,16 +44,68 @@ public class GroupClient extends MessageServerTcpClient {
 			System.out.println(result);
 			if (type.equals("groupMsg")) {
 				// TODO 收到群组消息，转发给每个人
+				
 			} else if (type.equals("createGroup")) {
-				// TODO 创建群组，通知每个人
-			} else if (type.equals("pullMemberConf")) {
-				// TODO 用户确认进入群组后修改数据库
+				// 创建群组，通知每个人
+				Group group=new Gson().fromJson(content, Group.class);
+				List<String> members=group.getMembers();
+				for(String m : members){
+					Message msg = new Message("sys_group", m, "createGroupRes", message.getContent());
+					client.send(msg);
+				}
+				// TODO 更新数据库
+				GroupService.createGroup(group);
+			} else if (type.equals("pullMember")) {
+				// 用户进入群组后修改数据库
+				Group group=new Gson().fromJson(content, Group.class);
+				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
+				group.setMembers(members);
+				if(members!=null){
+					for(String m : members){
+						Message msg = new Message("sys_group", m, "pullMemberRes", message.getContent());
+						client.send(msg);
+					}
+					// TODO 更新数据库 
+					GroupService.pullMember(group);
+				}
 			} else if (type.equals("modifyGroupName")) {
-				// TODO 修改群组名称
+				// 修改群组名称
+				Group group=new Gson().fromJson(content, Group.class);
+				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
+				if(members!=null){
+					for(String m : members){
+						Message msg = new Message("sys_group", m, "modifyGroupNameRes", message.getContent());
+						client.send(msg);
+					}
+					// TODO 更新数据库 
+					GroupService.modifyGroupName(group);
+				}
 			} else if (type.equals("delMember")) {
-				// TODO 删除成员，直接修改数据库，通知每个人
+				// 删除成员，直接修改数据库，通知每个人
+				Group group=new Gson().fromJson(content, Group.class);
+				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
+				group.setMembers(members);
+				if(members!=null){
+					for(String m : members){
+						Message msg = new Message("sys_group", m, "delMemberRes", message.getContent());
+						client.send(msg);
+					}
+					// TODO 更新数据库 
+					GroupService.delMember(group);
+				}
 			}else if(type.equals("quitGroup")){
-				// TODO 退群，修改数据库，通知每个人
+				// 退群，修改数据库，通知每个人
+				Group group=new Gson().fromJson(content, Group.class);
+				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
+				group.setMembers(members);
+				if(members!=null){
+					for(String m : members){
+						Message msg = new Message("sys_group", m, "quitGroupRes", message.getContent());
+						client.send(msg);
+					}
+					// TODO 更新数据库 
+					GroupService.quitGroup(group);
+				}
 			}
 		}
 	}

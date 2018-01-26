@@ -1,6 +1,6 @@
 echo off
 
-set HOME=C:\Users\AlanP\Workspaces\IM
+set HOME=C:\Users\AlanP\git\IMService
 set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_151
 set path=C:\Windows\system32;
 set path=%path%;%JAVA_HOME%\bin;

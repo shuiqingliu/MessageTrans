@@ -1,8 +1,11 @@
 package com.jyt.clients;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
+import com.jyt.clients.model.Group;
 import com.jyt.clients.model.User;
 import com.jyt.message.Message;
 import com.jyt.message.MessageConfig;
@@ -17,7 +20,14 @@ public class TestClient extends MessageServerTcpClient{
 	public TestClient(String server_ip, String server_name) {
 		super(server_ip, server_name,"sys_test");
 		addListener("loginRes",new ResponseListener(this));
+		addListener("createGroupRes",new ResponseListener(this));
+		addListener("pullMemberRes",new ResponseListener(this));
+		addListener("delMemberRes",new ResponseListener(this));
+		addListener("quitGroupRes",new ResponseListener(this));
+		addListener("modifyGroupNameRes",new ResponseListener(this));
+		addListener("groupMsgRes",new ResponseListener(this));
 	}
+	
 
 	public class ResponseListener implements MessageListener
 	{
@@ -45,20 +55,55 @@ public class TestClient extends MessageServerTcpClient{
 		byte[] bs = null;
 		Scanner sc = new Scanner(System.in);
 		String str = null;
+		Message msg=null;
 		
-		/*while (true) {
+		//创建测试群组消息
+		Group gp=new Group();
+		gp.setGid("Android2017");
+		gp.setUid("u1");
+		gp.setGname("test");
+		gp.setMid("u5");
+		List<String> mem=new ArrayList<String>();
+		mem.add("u2");
+		mem.add("u3");
+		mem.add("u4");
+		gp.setMembers(mem);
+		
+		//循环获取输入，进行相应测试
+		while (true) {
+			System.out.print(">>>");
 			str = sc.nextLine();
-			Message msg = new Message("sys_test","sys_login","login",bs);
+			String[] myargs=str.split(" ");
+			if(myargs[0].equals("login")){
+				//测试登录
+				User user=new User();
+				user.setId("123");
+				user.setName("liunan");
+				user.setPasswd("123");
+				bs = MySerializable.object_bytes(new Gson().toJson(user));
+				msg = new Message("sys_test","sys_login","login",bs);
+			}else if(myargs[0].equals("createGroup")){
+				//测试创建群组
+				bs = MySerializable.object_bytes(new Gson().toJson(gp));
+				msg = new Message("sys_test","sys_group","createGroup",bs);
+			}else if(myargs[0].equals("pullMember")){
+				bs = MySerializable.object_bytes(new Gson().toJson(gp));
+				msg = new Message("sys_test","sys_group","pullMember",bs);
+			}else if(myargs[0].equals("delMember")){
+				bs = MySerializable.object_bytes(new Gson().toJson(gp));
+				msg = new Message("sys_test","sys_group","delMember",bs);
+			}else if(myargs[0].equals("quitGroup")){
+				bs = MySerializable.object_bytes(new Gson().toJson(gp));
+				msg = new Message("sys_test","sys_group","quitGroup",bs);
+			}else if(myargs[0].equals("modifyGroupName")){
+				if(myargs.length>=2){
+					gp.setGname(myargs[1]);
+				}
+				bs = MySerializable.object_bytes(new Gson().toJson(gp));
+				msg = new Message("sys_test","sys_group","modifyGroupName",bs);
+			}
 			client.send(msg);
-		}*/
-		
-		User user=new User();
-		user.setId("123");
-		user.setName("liunan");
-		user.setPasswd("123");
-		bs = MySerializable.object_bytes(new Gson().toJson(user));
-		Message msg = new Message("sys_test","sys_login","login",bs);
-		client.send(msg);
+		}
 		
 	}
 }
