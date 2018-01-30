@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
+import com.jyt.clients.model.Friend;
 import com.jyt.clients.model.Group;
 import com.jyt.clients.model.User;
 import com.jyt.message.Message;
@@ -26,6 +27,8 @@ public class TestClient extends MessageServerTcpClient{
 		addListener("quitGroupRes",new ResponseListener(this));
 		addListener("modifyGroupNameRes",new ResponseListener(this));
 		addListener("groupMsgRes",new ResponseListener(this));
+		addListener("addFriConfRes",new ResponseListener(this));
+		addListener("delFriRes",new ResponseListener(this));
 	}
 	
 
@@ -87,20 +90,34 @@ public class TestClient extends MessageServerTcpClient{
 				bs = MySerializable.object_bytes(new Gson().toJson(gp));
 				msg = new Message("sys_test","sys_group","createGroup",bs);
 			}else if(myargs[0].equals("pullMember")){
+				//测试添加群成员
 				bs = MySerializable.object_bytes(new Gson().toJson(gp));
 				msg = new Message("sys_test","sys_group","pullMember",bs);
 			}else if(myargs[0].equals("delMember")){
+				//测试删除群成员
 				bs = MySerializable.object_bytes(new Gson().toJson(gp));
 				msg = new Message("sys_test","sys_group","delMember",bs);
 			}else if(myargs[0].equals("quitGroup")){
+				//测试退群
 				bs = MySerializable.object_bytes(new Gson().toJson(gp));
 				msg = new Message("sys_test","sys_group","quitGroup",bs);
 			}else if(myargs[0].equals("modifyGroupName")){
+				//测试修改群名称
 				if(myargs.length>=2){
 					gp.setGname(myargs[1]);
 				}
 				bs = MySerializable.object_bytes(new Gson().toJson(gp));
 				msg = new Message("sys_test","sys_group","modifyGroupName",bs);
+			}else if(myargs[0].equals("addFriConf")){
+				//测试添加好友
+				Friend f=new Friend("123","456");
+				bs = MySerializable.object_bytes(new Gson().toJson(f));
+				msg = new Message("sys_test","sys_friends","addFriConf",bs);
+			}else if(myargs[0].equals("delFri")){
+				//测试删除好友
+				Friend f=new Friend("123","456");
+				bs = MySerializable.object_bytes(new Gson().toJson(f));
+				msg = new Message("sys_test","sys_friends","delFri",bs);
 			}
 			client.send(msg);
 		}
