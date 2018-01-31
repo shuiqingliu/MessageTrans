@@ -15,20 +15,32 @@ public class UserInfoService {
 		User user = null;
 		return user;
 	}
-	
-	public static void modifyUserInfo(User user){
-		
+
+	public static void modifyUserInfo(User user) {
+		String sql = "UPDATE t_group SET name='" + user.getName()
+				+ "', passwd='" + user.getPasswd() + "', avater='"
+				+ user.getAvater() + "', department='" + user.getDepartment()
+				+ "', phone='" + user.getPhone() + "', email='"
+				+ user.getEmail() + "' WHERE id='" + user.getId() + "'";
+		try {
+			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+			Connection conn = connPool.getConnection();
+			Statement stmt = conn.createStatement();
+			stmt.execute(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	public static List<String> getAllUsers(){
-		ConnectionPool connPool=ConnectionPoolUtils.GetPoolInstance();//单例模式创建连接池对象  
-		List<String> uids=new ArrayList<String>();
-		String sql="select * from user";
+
+	public static List<String> getAllUsers() {
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
+		List<String> uids = new ArrayList<String>();
+		String sql = "select * from user";
 		try {
 			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();  
+			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()){
+			while (rs.next()) {
 				uids.add(rs.getString("id"));
 			}
 			return uids;

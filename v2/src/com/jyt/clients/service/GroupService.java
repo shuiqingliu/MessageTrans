@@ -58,7 +58,7 @@ public class GroupService {
 			memstr += (m + ",");
 		}
 		memstr += group.getMid();
-		String sql = "UPDATE t_group SET members='" + memstr + "'";
+		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_id='"+group.getGid()+"'";
 		try {
 			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 			Connection conn = connPool.getConnection();
