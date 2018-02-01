@@ -42,7 +42,7 @@ public class LoginClient extends MessageServerTcpClient {
 				// TODO 通过数据库判断是否登录成功
 				User user = new Gson().fromJson(content, User.class);
 				if (LoginService.isLoginSuccess(user)) {
-					res = "{\"result\":\"success\"}";
+					res="{\"result\":\"success\",\"name\":\""+user.getName()+"\"}";
 				} else {
 					res = "{\"result\":\"fail\"}";
 				}

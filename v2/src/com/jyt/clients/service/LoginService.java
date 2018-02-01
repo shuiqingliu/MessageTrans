@@ -12,7 +12,7 @@ import com.jyt.clients.model.User;
 public class LoginService {
 	public static boolean isLoginSuccess(User user){
 		ConnectionPool connPool=ConnectionPoolUtils.GetPoolInstance();//单例模式创建连接池对象  
-		String sql="select * from user where id='"+user.getId()+"' and password='"+user.getPasswd()+"'";
+		String sql="select * from user where name='"+user.getName()+"' and password='"+user.getPasswd()+"'";
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();  
