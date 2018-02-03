@@ -42,8 +42,12 @@ public class MessageForwarder extends MessageServerTcpClient {
             messageBean.setTime(message.getCreated());
             //将 messageBean 转为 json 字符串
             String forwardMessage = new MessageParser().messageToJson(messageBean);
-            //客户端列表去重
-            removeClosedSocket(ClientManager.getClientManager());
+            System.out.println("forwardMessage:" + forwardMessage);
+            /*客户端列表去重
+            *不需要去重，因为 HashMap 的 put 方法当 key 一致的时候原来的值会被替换
+            * 详见：https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html#put(K,%20V)
+            *removeClosedSocket(ClientManager.getClientManager());
+            * */
             //将消息发送给客户端
             ClientManager.getClientManager().sendMessage(to,forwardMessage);
         }

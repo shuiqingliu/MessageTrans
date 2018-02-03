@@ -32,15 +32,17 @@ public class ClientManager {
     public void sendMessage(String userName, String message) {
         try {
             //将消息发送给指定的客户端
+            System.out.println("receiveUser" + userName);
             Socket socket = clientList.get(userName);
             System.out.println(socket);
             BufferedWriter writerMessage = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-
-            if (!socket.equals(socket)) {
+            //如果连接还保持就发送消息
+            if ( !serverClosed(socket) ){
                 writerMessage.write(message);
                 writerMessage.newLine();
                 writerMessage.flush();
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
