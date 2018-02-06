@@ -21,8 +21,7 @@ public class GroupService {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next()) {
-				group.setMembers(Arrays.asList(rs.getString("members").split(
-						",")));
+				group.setMembers(Arrays.asList(rs.getString("members").split("¡¢")));
 				return group;
 			} else {
 				return group;
@@ -106,11 +105,11 @@ public class GroupService {
 		String memstr = "";
 		for (String m : members) {
 			if(!m.equals(group.getUid())){
-				memstr += (m + ",");
+				memstr += (m + "¡¢");
 			}	
 		}
 		memstr=memstr.substring(0, memstr.length() - 1);
-		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_id='"+group.getGid()+"'";
+		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_name='"+group.getGname()+"'";
 		try {
 			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 			Connection conn = connPool.getConnection();

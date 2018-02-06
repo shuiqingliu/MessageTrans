@@ -46,11 +46,10 @@ public class LoginClient extends MessageServerTcpClient {
 				} else {
 					res = "{\"result\":\"fail\"}";
 				}
-				bs = MySerializable.object_bytes(new JsonParser().parse(res)
-						.toString());
+				bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
 				Message msg = new Message("sys_login", from, "loginRes", bs);
 				client.send(msg);
-				System.out.println(res);
+				System.out.println(msg);
 			}
 		}
 	}

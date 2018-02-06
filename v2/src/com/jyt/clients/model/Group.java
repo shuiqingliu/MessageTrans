@@ -9,7 +9,6 @@ public class Group {
 	private String gname;  //群名称
 	private String mid;  //加群或退群的用户的id
 	private List<String> members;  //群里所有用户的id
-	
 	public Group() {
 	}
 
@@ -60,6 +59,6 @@ public class Group {
 	public void setMid(String mid) {
 		this.mid = mid;
 	}
-	
+
 
 }

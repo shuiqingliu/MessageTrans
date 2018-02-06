@@ -1,5 +1,6 @@
 package com.jyt.clients;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -12,7 +13,8 @@ import com.jyt.message.MessageServerTcpClient;
 import com.jyt.util.ArgumentString;
 import com.jyt.util.MyDate;
 import com.jyt.util.MySerializable;
-
+import org.json.JSONObject;
+import org.json.JSONException;
 public class GroupClient extends MessageServerTcpClient {
 
 	public GroupClient(String server_ip, String server_name) {
@@ -76,9 +78,10 @@ public class GroupClient extends MessageServerTcpClient {
 					for(String m : members){
 						Message msg = new Message("sys_group", m, "modifyGroupNameRes", message.getContent());
 						client.send(msg);
+						System.out.println(msg);
 					}
 					// TODO 更新数据库 
-					GroupService.modifyGroupName(group);
+					//GroupService.modifyGroupName(group);
 				}
 			} else if (type.equals("delMember")) {
 				// 删除成员，直接修改数据库，通知每个人
@@ -95,18 +98,33 @@ public class GroupClient extends MessageServerTcpClient {
 				}
 			}else if(type.equals("quitGroup")){
 				// 退群，修改数据库，通知每个人
-				Group group=new Gson().fromJson(content, Group.class);
-				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
-				group.setMembers(members);
+
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					String groupName=jsonObject.getString("gname");
+					String[] userids = jsonObject.getString("member").split("、");
+					List<String> members= Arrays.asList(userids);
+					Group group = new Group();
+					group.setGname(groupName);
+					group.setMembers(members);
+				//List<String> members=GroupService.getGroup(group.getGid()).getMembers();
 				if(members!=null){
 					for(String m : members){
 						Message msg = new Message("sys_group", m, "quitGroupRes", message.getContent());
 						client.send(msg);
+						System.out.println(msg);
 					}
+					Message msg = new Message("sys_group", from, "quitGroupRes", message.getContent());
+					client.send(msg);
+					System.out.println(msg);
 					// TODO 更新数据库 
-					GroupService.quitGroup(group);
+					//GroupService.quitGroup(group);
+				}
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
 			}
+
 		}
 	}
 
