@@ -17,11 +17,13 @@ public class UserInfoService {
 	}
 
 	public static void modifyUserInfo(User user) {
-		String sql = "UPDATE t_group SET name='" + user.getName()
+/*		String sql = "UPDATE user SET name='" + user.getName()
 				+ "', passwd='" + user.getPasswd() + "', avater='"
 				+ user.getAvater() + "', department='" + user.getDepartment()
 				+ "', phone='" + user.getPhone() + "', email='"
-				+ user.getEmail() + "' WHERE id='" + user.getId() + "'";
+				+ user.getEmail() + "' WHERE id='" + user.getId() + "'";*/
+
+		String sql="UPDATE user SET password ='"+ user.getPasswd() + "',email ='"+user.getEmail()+"',phone = '"+user.getPhone()+"'  where id='"+user.getId()+"'";
 		try {
 			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 			Connection conn = connPool.getConnection();
