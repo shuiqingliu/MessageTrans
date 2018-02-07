@@ -95,6 +95,7 @@ public class GroupClient extends MessageServerTcpClient {
 					}
 					// TODO 更新数据库 
 					GroupService.delMember(group);
+
 				}
 			}else if(type.equals("quitGroup")){
 				// 退群，修改数据库，通知每个人

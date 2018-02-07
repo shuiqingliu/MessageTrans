@@ -42,14 +42,14 @@ public class LoginClient extends MessageServerTcpClient {
 				// TODO 通过数据库判断是否登录成功
 				User user = new Gson().fromJson(content, User.class);
 				if (LoginService.isLoginSuccess(user)) {
-					res = "{\"result\":\"success\",\"name\":\""+user.getName()+"\"}";
+					res="{\"result\":\"success\",\"name\":\""+user.getName()+"\"}";
 				} else {
 					res = "{\"result\":\"fail\"}";
 				}
-				bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
+				bs = MySerializable.object_bytes(new JsonParser().parse(res)
+						.toString());
 				Message msg = new Message("sys_login", from, "loginRes", bs);
 				client.send(msg);
-				System.out.println(msg);
 			}
 		}
 	}
