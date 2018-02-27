@@ -60,6 +60,7 @@ public class UserInfoClient extends MessageServerTcpClient{
 	
 	public static void main(String[] args) {
 		UserInfoClient client=new UserInfoClient(MessageConfig.server_ip,MessageConfig.server_name);
+		client.register();
 		client.work();
 	}
 }
