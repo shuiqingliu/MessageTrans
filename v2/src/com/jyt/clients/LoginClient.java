@@ -50,6 +50,7 @@ public class LoginClient extends MessageServerTcpClient {
 						.toString());
 				Message msg = new Message("sys_login", from, "loginRes", bs);
 				client.send(msg);
+				System.out.println(msg);
 			}
 		}
 	}

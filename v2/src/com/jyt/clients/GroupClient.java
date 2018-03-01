@@ -49,26 +49,60 @@ public class GroupClient extends MessageServerTcpClient {
 				
 			} else if (type.equals("createGroup")) {
 				// 创建群组，通知每个人
-				Group group=new Gson().fromJson(content, Group.class);
-				List<String> members=group.getMembers();
-				for(String m : members){
-					Message msg = new Message("sys_group", m, "createGroupRes", message.getContent());
-					client.send(msg);
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					String groupId=jsonObject.getString("gid");
+					String groupName=jsonObject.getString("gname");
+					String[] userids = jsonObject.getString("member").split("、");
+					List<String> members= Arrays.asList(userids);
+					Group group = new Group();
+					group.setGid(groupId);
+					group.setGname(groupName);
+					group.setMembers(members);
+					if(members!=null){
+						for(String m : members){
+							Message msg = new Message("sys_group", m, "createGroupRes", message.getContent());
+							client.send(msg);
+							System.out.println(msg);
+						}
+
+						// TODO 更新数据库
+						//GroupService.createGroup(group);
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
+//				Group group=new Gson().fromJson(content, Group.class);
+//				List<String> members=group.getMembers();
+//				for(String m : members){
+//					Message msg = new Message("sys_group", m, "createGroupRes", message.getContent());
+//					client.send(msg);
+//				}
 				// TODO 更新数据库
-				GroupService.createGroup(group);
+				//GroupService.createGroup(group);
 			} else if (type.equals("pullMember")) {
 				// 用户进入群组后修改数据库
-				Group group=new Gson().fromJson(content, Group.class);
-				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
-				group.setMembers(members);
-				if(members!=null){
-					for(String m : members){
-						Message msg = new Message("sys_group", m, "pullMemberRes", message.getContent());
-						client.send(msg);
-					}
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					String groupId=jsonObject.getString("gid");
+					String groupName=jsonObject.getString("gname");
+					String[] userids = jsonObject.getString("member").split("、");
+					List<String> members= Arrays.asList(userids);
+					Group group = new Group();
+					group.setGid(groupId);
+					group.setGname(groupName);
+					group.setMembers(members);
+					if(members!=null){
+						for(String m : members){
+							Message msg = new Message("sys_group", m, "pullMemberRes", message.getContent());
+							client.send(msg);
+							System.out.println(msg);
+						}
 					// TODO 更新数据库 
 					GroupService.pullMember(group);
+				}
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
 			} else if (type.equals("modifyGroupName")) {
 				// 修改群组名称
@@ -84,19 +118,41 @@ public class GroupClient extends MessageServerTcpClient {
 					//GroupService.modifyGroupName(group);
 				}
 			} else if (type.equals("delMember")) {
-				// 删除成员，直接修改数据库，通知每个人
-				Group group=new Gson().fromJson(content, Group.class);
-				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
-				group.setMembers(members);
-				if(members!=null){
-					for(String m : members){
-						Message msg = new Message("sys_group", m, "delMemberRes", message.getContent());
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					String groupName=jsonObject.getString("gname");
+					String[] userids = jsonObject.getString("member").split("、");
+					List<String> members= Arrays.asList(userids);
+					Group group = new Group();
+					group.setGname(groupName);
+					group.setMembers(members);
+					if(members!=null){
+						for(String m : members){
+							Message msg = new Message("sys_group", m, "delMemberRes", message.getContent());
+							client.send(msg);
+							System.out.println(msg);
+						}
+						Message msg = new Message("sys_group", from, "delMemberRes", message.getContent());
 						client.send(msg);
+						System.out.println(msg);
+						// TODO 更新数据库
+						//GroupService.delMember(group);
 					}
-					// TODO 更新数据库 
-					GroupService.delMember(group);
-
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
+				// 删除成员，直接修改数据库，通知每个人
+//				Group group=new Gson().fromJson(content, Group.class);
+//				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
+//				group.setMembers(members);
+//				if(members!=null){
+//					for(String m : members){
+//						Message msg = new Message("sys_group", m, "delMemberRes", message.getContent());
+//						client.send(msg);
+//					}
+//					// TODO 更新数据库
+//					GroupService.delMember(group);
+//				}
 			}else if(type.equals("quitGroup")){
 				// 退群，修改数据库，通知每个人
 
