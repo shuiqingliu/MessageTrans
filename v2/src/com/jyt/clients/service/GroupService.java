@@ -54,7 +54,7 @@ public class GroupService {
 		List<String> members = group.getMembers();
 		String memstr = "";
 		for (String m : members) {
-			memstr += (m + ",");
+			memstr += (m + "¡¢");
 		}
 		memstr += group.getMid();
 		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_id='"+group.getGid()+"'";
@@ -85,7 +85,7 @@ public class GroupService {
 		String memstr = "";
 		for (String m : members) {
 			if(!m.equals(group.getMid())){
-				memstr += (m + ",");
+				memstr += (m + "¡¢");
 			}	
 		}
 		memstr=memstr.substring(0, memstr.length() - 1);
