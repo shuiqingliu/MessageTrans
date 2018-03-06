@@ -11,9 +11,12 @@ import java.util.Vector;
 
 public class ClientManager {
     //使用一个 clientManager 来管理所有的客户端，故采用单例模式
-    private static final ClientManager clientManager = new ClientManager();
+    private static  ClientManager clientManager;
 
-    public static ClientManager getClientManager() {
+    public static synchronized ClientManager getClientManager() {
+        if (clientManager == null){
+            clientManager = new ClientManager();
+        }
         return clientManager;
     }
 

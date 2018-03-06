@@ -81,10 +81,8 @@ public class MessageHandler implements Runnable{
 
     //开启转发消息线程来处理消息
     private void startForwardThread(String clientName){
-        if (forwarder == null) {
-            forwarder = new MessageForwarder("127.0.0.1", MessageConfig.server_name, 10001, clientName);
-            forwarder.work();
-        }
+        forwarder = new MessageForwarder("127.0.0.1", MessageConfig.server_name, 10001, clientName);
+        forwarder.work();
     }
 
     //根据 json 字符串来创建 Message 对象
