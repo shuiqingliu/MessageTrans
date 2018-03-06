@@ -1,9 +1,12 @@
 package com.jyt.clients;
 
 
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.jyt.clients.model.Friend;
+import com.jyt.clients.model.User;
 import com.jyt.clients.service.FriendsService;
 import com.jyt.message.Message;
 import com.jyt.message.MessageConfig;
@@ -19,6 +22,7 @@ public class FriendsClient extends MessageServerTcpClient {
 		super(server_ip, server_name, "sys_friends");
 		addListener("addFriConf", new ResponseListener(this));
 		addListener("delFri", new ResponseListener(this));
+		addListener("fetchFris", new ResponseListener(this));
 	}
 
 	public class ResponseListener implements MessageListener {
@@ -57,6 +61,12 @@ public class FriendsClient extends MessageServerTcpClient {
 				Message msg = new Message("sys_friend", from, "delFriRes", bs);
 				client.send(msg);
 				FriendsService.delFri(friend.getUid(), friend.getFid());
+			}else if (type.equals("fetchFris")) {
+				// 获取好友列表
+				List<User> fris=FriendsService.fetchFris(friend.getUid());
+				bs = MySerializable.object_bytes(new Gson().toJson(fris));
+				Message msg = new Message("sys_friend", from, "fetchFrisRes", bs);
+				client.send(msg);	
 			}
 		}
 	}

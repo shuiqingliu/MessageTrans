@@ -4,7 +4,7 @@ public class User {
 	private String id;
 	private String name;
 	private String passwd;
-	private String avater;
+	private String avatar;
 	private String department;
 	private String phone;
 	private String email;
@@ -17,7 +17,7 @@ public class User {
 		super();
 		this.id = id;
 		this.name = name;
-		this.avater = avater;
+		this.avatar = avater;
 		this.department = department;
 		this.phone = phone;
 		this.email = email;
@@ -39,12 +39,12 @@ public class User {
 		this.name = name;
 	}
 
-	public String getAvater() {
-		return avater;
+	public String getAvatar() {
+		return avatar;
 	}
 
-	public void setAvater(String avater) {
-		this.avater = avater;
+	public void setAvatar(String avater) {
+		this.avatar = avater;
 	}
 
 	public String getDepartment() {
