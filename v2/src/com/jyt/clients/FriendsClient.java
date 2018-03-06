@@ -74,6 +74,7 @@ public class FriendsClient extends MessageServerTcpClient {
 	public static void main(String[] args) {
 		FriendsClient client = new FriendsClient(MessageConfig.server_ip,
 				MessageConfig.server_name);
+		client.register();
 		client.work();
 	}
 }

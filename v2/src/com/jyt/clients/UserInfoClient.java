@@ -1,6 +1,7 @@
 package com.jyt.clients;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.jyt.clients.model.User;
 import com.jyt.clients.service.UserInfoService;
 import com.jyt.message.Message;
@@ -48,12 +49,18 @@ public class UserInfoClient extends MessageServerTcpClient{
 			}else if(type.equals("modifyUserInfo")){
 				// 修改用户信息
 				UserInfoService.modifyUserInfo(user);
+				res="{\"result\":\"success\"}";
+				bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
+				Message msg = new Message("sys_userinfo",from,"modifyUserInfo",bs);
+				client.send(msg);
+				System.out.println("success发送成功");
 			}
 		}
 	}
 	
 	public static void main(String[] args) {
 		UserInfoClient client=new UserInfoClient(MessageConfig.server_ip,MessageConfig.server_name);
+		client.register();
 		client.work();
 	}
 }
