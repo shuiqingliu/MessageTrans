@@ -47,7 +47,7 @@ public class FriendsClient extends MessageServerTcpClient {
 			byte[] bs = null;
 			if (type.equals("addFriConf")) {
 				// 添加好友成功后处理，返回好友信息
-				res = "{\"result\":\"success\"}";
+				res = "{\"success\":\"yes\"}";
 				bs = MySerializable.object_bytes(new JsonParser().parse(res)
 						.toString());
 				Message msg = new Message("sys_friend", from, "addFriConfRes", bs);
@@ -55,7 +55,7 @@ public class FriendsClient extends MessageServerTcpClient {
 				FriendsService.addFri(friend.getUid(), friend.getFid());
 			} else if (type.equals("delFri")) {
 				// 删除好友处理
-				res = "{\"result\":\"success\"}";
+				res = "{\"success\":\"yes\"}";
 				bs = MySerializable.object_bytes(new JsonParser().parse(res)
 						.toString());
 				Message msg = new Message("sys_friend", from, "delFriRes", bs);
