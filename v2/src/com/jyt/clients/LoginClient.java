@@ -41,11 +41,7 @@ public class LoginClient extends MessageServerTcpClient {
 			if (type.equals("login")) {
 				// TODO 通过数据库判断是否登录成功
 				User user = new Gson().fromJson(content, User.class);
-				if (LoginService.isLoginSuccess(user)) {
-					res="{\"result\":\"success\",\"name\":\""+user.getName()+"\"}";
-				} else {
-					res = "{\"result\":\"fail\"}";
-				}
+				res = LoginService.isLoginSuccess(user);
 				bs = MySerializable.object_bytes(new JsonParser().parse(res)
 						.toString());
 				Message msg = new Message("sys_login", from, "loginRes", bs);
@@ -58,6 +54,7 @@ public class LoginClient extends MessageServerTcpClient {
 	public static void main(String[] args) {
 		LoginClient client = new LoginClient(MessageConfig.server_ip,
 				MessageConfig.server_name);
+		client.register();
 		client.work();
 	}
 }
