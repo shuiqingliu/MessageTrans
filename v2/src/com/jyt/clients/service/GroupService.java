@@ -21,7 +21,9 @@ public class GroupService {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next()) {
-				group.setMembers(Arrays.asList(rs.getString("members").split("¡¢")));
+				String members=rs.getString("members");
+				String[] m=members.split("¡¢");
+				group.setMembers(Arrays.asList(m));
 				return group;
 			} else {
 				return group;

@@ -2,6 +2,7 @@ package com.jyt.clients;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.jyt.clients.model.Group;
@@ -48,16 +49,29 @@ public class GroupClient extends MessageServerTcpClient {
 				// TODO 收到群组消息，转发给每个人
 				try {
 					JSONObject jsonObject = new JSONObject(content);
-					String groupId=jsonObject.getString("gid");
+					String groupId=jsonObject.getString("to");
+					String content_=jsonObject.getString("content");
+					String time=jsonObject.getString("ft");
+
 					Group group = GroupService.getGroup(groupId);
 					List<String> members= group.getMembers();
 //					String[] userids = jsonObject.getString("member").split("、");
 //					List<String> members= Arrays.asList(userids);
 					if(members!=null){
 						for(String m : members){
-							Message msg = new Message("sys_group", m, "msg", message.getContent());
-							client.send(msg);
-							System.out.println(msg);
+							if (!m.equals(from)){
+								JSONObject sendMsg=new JSONObject();
+								sendMsg.put("from",groupId);
+								sendMsg.put("to",m);
+								sendMsg.put("ft",time);
+								sendMsg.put("content",content_);
+								byte[] bs= MySerializable.object_bytes(sendMsg.toString());
+
+								Message msg = new Message("sys_group", m, "msg", bs);
+								client.send(msg);
+								System.out.println(msg);
+							}
+
 						}
 						// TODO 更新数据库
 					}

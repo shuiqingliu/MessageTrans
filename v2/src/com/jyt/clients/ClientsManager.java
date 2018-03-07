@@ -15,6 +15,7 @@ public class ClientsManager extends MessageManager {
 		manager.register("sys_userinfo");
 		manager.register("sys_search");
 		manager.register("sys_test");
+		manager.register("sys_check");
 
 		// 注册所有用户
 		List<String> uids = UserInfoService.getAllUsers();
