@@ -10,21 +10,21 @@ import com.jyt.clients.db.ConnectionPoolUtils;
 import com.jyt.clients.model.User;
 
 public class LoginService {
-	public static boolean isLoginSuccess(User user){
-		ConnectionPool connPool=ConnectionPoolUtils.GetPoolInstance();//µ¥ÀýÄ£Ê½´´½¨Á¬½Ó³Ø¶ÔÏó  
+	public static String isLoginSuccess(User user){
+		ConnectionPool connPool=ConnectionPoolUtils.GetPoolInstance();//ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³Ø¶ï¿½ï¿½ï¿½  
 		String sql="select * from user where name='"+user.getName()+"' and password='"+user.getPasswd()+"'";
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();  
 			ResultSet rs = stmt.executeQuery(sql);
 			if(rs.next()){
-				return true;
+				return "{'success':'yes','uid':'"+rs.getString("id")+"'}";
 			}else{
-				return false;
+				return "{'sucess':'no'}";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return "{'sucess':'no'}";
 		}
 	}
 }

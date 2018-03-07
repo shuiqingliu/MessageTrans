@@ -4,13 +4,20 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.net.Socket;
 import java.rmi.Naming;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jyt.clients.db.ConnectionPool;
+import com.jyt.clients.db.ConnectionPoolUtils;
 import com.jyt.util.ArgumentString;
 import com.jyt.util.MyPrint;
+import com.jyt.util.MySerializable;
 import com.jyt.util.NameValue;
 
 public class MessageServerTcpClient implements Runnable {
@@ -408,6 +415,22 @@ public class MessageServerTcpClient implements Runnable {
 		int ret = 0;
 		try{
 			ret = remoteObj.add(message);
+			
+			//将要发送的消息存入数据库
+			Date now=new Date();    
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+			String sql = "INSERT INTO message VALUES('" + message.getFrom() + "', '"
+					+ message.getTo() + "', '" + message.getType() + "','"+df.format(now)+"','"+(String) MySerializable.bytes_object(message
+							.getContent())+"')";
+			try {
+				Connection conn = connPool.getConnection();
+				Statement stmt = conn.createStatement();
+				stmt.execute(sql);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		catch(Exception e)
 		{

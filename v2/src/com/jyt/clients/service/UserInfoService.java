@@ -11,15 +11,35 @@ import com.jyt.clients.db.ConnectionPoolUtils;
 import com.jyt.clients.model.User;
 
 public class UserInfoService {
+	
 	public static User fetchUserInfo(String uid) {
-		User user = null;
-		return user;
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+		User user = new User();
+		String sql = "select * from user where id='"+uid+"'";
+		try {
+			Connection conn = connPool.getConnection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				user.setId(rs.getString("id"));
+				user.setAvatar(rs.getString("avatar"));
+				user.setDepartment(rs.getString("department"));
+				user.setEmail(rs.getString("email"));
+				user.setName(rs.getString("name"));
+				user.setPhone(rs.getString("phone"));
+			}
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return user;
+		}
+
 	}
 
 	public static void modifyUserInfo(User user) {
 /*		String sql = "UPDATE user SET name='" + user.getName()
 				+ "', passwd='" + user.getPasswd() + "', avater='"
-				+ user.getAvater() + "', department='" + user.getDepartment()
+				+ user.getAvatar() + "', department='" + user.getDepartment()
 				+ "', phone='" + user.getPhone() + "', email='"
 				+ user.getEmail() + "' WHERE id='" + user.getId() + "'";*/
 

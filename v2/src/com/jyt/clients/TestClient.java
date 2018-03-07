@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
+import com.jyt.clients.FriendsClient.ResponseListener;
 import com.jyt.clients.model.Friend;
 import com.jyt.clients.model.Group;
+import com.jyt.clients.model.MessageRecord;
 import com.jyt.clients.model.User;
 import com.jyt.message.Message;
 import com.jyt.message.MessageConfig;
@@ -29,6 +31,8 @@ public class TestClient extends MessageServerTcpClient{
 		addListener("groupMsgRes",new ResponseListener(this));
 		addListener("addFriConfRes",new ResponseListener(this));
 		addListener("delFriRes",new ResponseListener(this));
+		addListener("fetchFrisRes", new ResponseListener(this));
+		addListener("searchRecordsRes", new ResponseListener(this));
 	}
 	
 
@@ -118,6 +122,18 @@ public class TestClient extends MessageServerTcpClient{
 				Friend f=new Friend("123","456");
 				bs = MySerializable.object_bytes(new Gson().toJson(f));
 				msg = new Message("sys_test","sys_friends","delFri",bs);
+			}else if(myargs[0].equals("fetchFris")){
+				//测试获取好友列表
+				Friend f=new Friend("3","");
+				bs = MySerializable.object_bytes(new Gson().toJson(f));
+				msg = new Message("sys_test","sys_friends","fetchFris",bs);
+			}else if(myargs[0].equals("searchRecords")){
+				//测试搜索聊天记录
+				MessageRecord mr=new MessageRecord();
+				mr.setUid("1");
+				mr.setContent("h");
+				bs = MySerializable.object_bytes(new Gson().toJson(mr));
+				msg = new Message("sys_test","sys_search","searchRecords",bs);
 			}
 			client.send(msg);
 		}
