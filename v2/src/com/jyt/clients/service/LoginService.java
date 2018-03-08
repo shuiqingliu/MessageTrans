@@ -20,7 +20,7 @@ public class LoginService {
 			if(rs.next()){
 				return "{'success':'yes','uid':'"+rs.getString("id")+"'}";
 			}else{
-				return "{'sucess':'no'}";
+				return "{'success':'no'}";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
