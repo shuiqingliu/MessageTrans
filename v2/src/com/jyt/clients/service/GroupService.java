@@ -39,7 +39,7 @@ public class GroupService {
 		String memstr = group.getUid();
 		List<String> members = group.getMembers();
 		for (String m : members) {
-			memstr += ("," + m);
+			memstr += ("¡¢" + m);
 		}
 		String sql = "INSERT INTO t_group VALUES('" + group.getGid() + "', '"
 				+ group.getGname() + "', '" + memstr + "')";

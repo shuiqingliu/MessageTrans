@@ -146,7 +146,7 @@ public class GroupClient extends MessageServerTcpClient {
 						System.out.println(msg);
 					}
 					// TODO 更新数据库 
-					//GroupService.modifyGroupName(group);
+					GroupService.modifyGroupName(group);
 				}
 			} else if (type.equals("delMember")) {
 				try {
@@ -167,7 +167,7 @@ public class GroupClient extends MessageServerTcpClient {
 						client.send(msg);
 						System.out.println(msg);
 						// TODO 更新数据库
-						//GroupService.delMember(group);
+						GroupService.delMember(group);
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -206,7 +206,7 @@ public class GroupClient extends MessageServerTcpClient {
 					client.send(msg);
 					System.out.println(msg);
 					// TODO 更新数据库 
-					//GroupService.quitGroup(group);
+					GroupService.quitGroup(group);
 				}
 				} catch (JSONException e) {
 					e.printStackTrace();
