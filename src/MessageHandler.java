@@ -43,17 +43,27 @@ public class MessageHandler implements Runnable{
                 messageParser = new MessageParser();
                 messageBean = messageParser.getMessageBean(socketLine);
                 //若为 login 类型的消息则创建连接,否则直接发送。
-                if (messageBean.getType().equals("login")){
+                System.out.println(messageBean.getFrom().length());
+                if (messageBean.getType().equals("login") && messageBean.getFrom().length() > 0){
                     //在服务器中注册该客户端
+                    System.out.println("=====" + messageBean.getFrom());
                     this.startForwardThread(messageBean.getFrom());
                     //将连接添加到 proxy server 的客户端维护 Map 中。
                     ClientManager.getClientManager().add(messageBean.getFrom(),socket);
                     //TODO: send login message
                 }
-                forwarder.send(createMessage(socketLine));
-                //打印发送的消息，并将暂存的消息置空
-                System.out.println("jsonData:" + jsonData.toString());
-                jsonData = new StringBuffer("");
+                if (ClientManager.getClientManager().clientList.get(messageBean.getTo()) == null){
+                    this.startForwardThread(messageBean.getTo());
+                }
+                if (ClientManager.getClientManager().clientList.get(messageBean.getFrom()) == null){
+                    this.startForwardThread(messageBean.getFrom());
+                }
+                if (messageBean.getType().equals("msg")) {
+                    forwarder.send(createMessage(socketLine));
+                    //打印发送的消息，并将暂存的消息置空
+                    System.out.println("jsonData:" + jsonData.toString());
+                    jsonData = new StringBuffer("");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,8 +91,8 @@ public class MessageHandler implements Runnable{
 
     //开启转发消息线程来处理消息
     private void startForwardThread(String clientName){
-        forwarder = new MessageForwarder("127.0.0.1", MessageConfig.server_name, 10001, clientName);
-        forwarder.work();
+            forwarder = new MessageForwarder("127.0.0.1", "msg", 10001, clientName);
+            forwarder.work();
     }
 
     //根据 json 字符串来创建 Message 对象

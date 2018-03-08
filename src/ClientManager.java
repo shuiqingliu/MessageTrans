@@ -35,7 +35,7 @@ public class ClientManager {
     public void sendMessage(String userName, String message) {
         try {
             //将消息发送给指定的客户端
-            System.out.println("receiveUser" + userName);
+            System.out.println("receiveUser:" + userName);
             Socket socket = clientList.get(userName);
             System.out.println(socket);
             BufferedWriter writerMessage = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
