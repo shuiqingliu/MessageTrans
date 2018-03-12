@@ -1,5 +1,4 @@
 package com.jyt.clients;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.jyt.clients.model.User;
@@ -13,7 +12,7 @@ import com.jyt.util.MyDate;
 import com.jyt.util.MySerializable;
 
 public class UserInfoClient extends MessageServerTcpClient{
-	
+
 	public UserInfoClient(String server_ip, String server_name) {
 		super(server_ip, server_name,"sys_userinfo");
 		addListener("fetchUserInfo",new ResponseListener(this));
@@ -42,11 +41,14 @@ public class UserInfoClient extends MessageServerTcpClient{
 			User user = new Gson().fromJson(content, User.class);
 			if(type.equals("fetchUserInfo")){
 				// 获取用户信息
-				String id = user.getId();
-				user=UserInfoService.fetchUserInfo(user.getId());
+				user=UserInfoService.fetchUserInfo(user.getName());
+
+
 				bs = MySerializable.object_bytes(new Gson().toJson(user));
-				Message msg = new Message("sys_userinfo",from,"fetchUserInfoRes",bs);
+
+				Message msg = new Message("sys_userinfo",from,"fetchUserInfo",bs);
 				client.send(msg);
+				System.out.println("fetch success");
 			}else if(type.equals("modifyUserInfo")){
 				// 修改用户信息
 				UserInfoService.modifyUserInfo(user);
@@ -58,7 +60,7 @@ public class UserInfoClient extends MessageServerTcpClient{
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		UserInfoClient client=new UserInfoClient(MessageConfig.server_ip,MessageConfig.server_name);
 		client.register();
