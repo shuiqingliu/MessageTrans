@@ -15,7 +15,7 @@ public class UserInfoService {
 	public static User fetchUserInfo(String uid) {
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 		User user = new User();
-		String sql = "select * from user where id='"+uid+"'";
+		String sql = "select * from user where name='"+uid+"'";
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
