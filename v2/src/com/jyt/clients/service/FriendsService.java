@@ -23,8 +23,8 @@ public class FriendsService {
 				+ fid + "')";
 		String sql2 = "INSERT INTO friends(uid, fid) VAlUES ('" + fid + "', '"
 				+ uid + "')";
-		String sql3="select * friends where uid='"+uid+"'AND fid='"+fid+"'";
-		String sql4="select * friends where uid='"+fid+"'AND fid='"+uid+"'";
+		String sql3="select * from friends where uid='"+uid+"'AND fid='"+fid+"'";
+		String sql4="select * from friends where uid='"+fid+"'AND fid='"+uid+"'";
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
