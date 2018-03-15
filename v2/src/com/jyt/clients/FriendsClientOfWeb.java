@@ -48,26 +48,45 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
 			String res = "";
 			byte[] bs = null;
 
-			String fid= "";
-			try {
-				JSONObject json=new JSONObject(content);
-				fid = json.getString("uid");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+
 
 
 			if (type.equals("delFri")) {
 				// 删除好友处理
+                String uid="";
+                String fid= "";
+                try {
+                    JSONObject json=new JSONObject(content);
+                    fid = json.getString("fid");
+                    uid = json.getString("uid");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
 				FriendsServiceOfWeb fs=new FriendsServiceOfWeb();
-				fs.delFri(from,fid);
-				res="{'success':'yes'}";
+                boolean b = fs.delFri(uid, fid);
+                if(b){
+                    res="{'success':'yes'}";
+                }else{
+                    res="{'sucess':'no'}";
+                }
 				bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
 				Message msg = new Message("sys_friends", from, "delFri", bs);
 				client.send(msg);
 			} else if(type.equals("fetchFris")){
+
+
+                String uid="";
+                try {
+                    JSONObject json=new JSONObject(content);
+                    uid = json.getString("uid");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
 				FriendsServiceOfWeb fs=new FriendsServiceOfWeb();
-				List<User> list=fs.fetchFris(fid);
+				List<User> list=fs.fetchFris(uid);
 				Gson gson=new Gson();
 				bs = MySerializable.object_bytes(gson.toJson(list).toString());
 				Message msg = new Message("sys_friends", from, "fetchFris", bs);

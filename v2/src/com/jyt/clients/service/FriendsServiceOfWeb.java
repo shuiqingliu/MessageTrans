@@ -74,7 +74,7 @@ public class FriendsServiceOfWeb {
 			while (rs.next()) {
 				String fid=rs.getString("fid");
 				System.out.println(fid);
-				User user=UserInfoService.fetchUserInfo(fid);
+				User user=UserInfoService.fetchUserInfoById(fid);
 				fris.add(user);
 			}
 			return fris;

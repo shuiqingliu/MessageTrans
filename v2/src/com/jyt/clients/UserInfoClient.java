@@ -59,8 +59,7 @@ public class UserInfoClient extends MessageServerTcpClient{
 				client.send(msg);
 				System.out.println("success发送成功");
 			}else if(type.equals("fetchUserInfoById")){
-				// 获取用户信息
-				//WEB小组对接
+				// 根据用户ID获取用户信息
 				user=UserInfoService.fetchUserInfoById(user.getId());
 				bs = MySerializable.object_bytes(new Gson().toJson(user));
 
