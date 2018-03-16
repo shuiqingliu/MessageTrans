@@ -36,6 +36,29 @@ public class UserInfoService {
 
 	}
 
+	public static User fetchUserInfoById(String uid){
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+		User user = new User();
+		String sql = "select * from user where id ='"+uid+"'";
+		try {
+			Connection conn = connPool.getConnection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				user.setId(rs.getString("id"));
+				user.setAvatar(rs.getString("avatar"));
+				user.setDepartment(rs.getString("department"));
+				user.setEmail(rs.getString("email"));
+				user.setName(rs.getString("name"));
+				user.setPhone(rs.getString("phone"));
+			}
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return user;
+		}
+	}
+
 	public static void modifyUserInfo(User user) {
 /*		String sql = "UPDATE user SET name='" + user.getName()
 				+ "', passwd='" + user.getPasswd() + "', avater='"
@@ -55,7 +78,7 @@ public class UserInfoService {
 	}
 
 	public static List<String> getAllUsers() {
-		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// µ¥ÀýÄ£Ê½´´½¨Á¬½Ó³Ø¶ÔÏó
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³Ø¶ï¿½ï¿½ï¿½
 		List<String> uids = new ArrayList<String>();
 		String sql = "select * from user";
 		try {
