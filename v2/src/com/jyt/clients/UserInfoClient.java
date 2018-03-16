@@ -17,6 +17,7 @@ public class UserInfoClient extends MessageServerTcpClient{
 		super(server_ip, server_name,"sys_userinfo");
 		addListener("fetchUserInfo",new ResponseListener(this));
 		addListener("modifyUserInfo",new ResponseListener(this));
+		addListener("fetchUserInfoById",new ResponseListener(this));
 	}
 
 	public class ResponseListener implements MessageListener
@@ -57,6 +58,14 @@ public class UserInfoClient extends MessageServerTcpClient{
 				Message msg = new Message("sys_userinfo",from,"modifyUserInfo",bs);
 				client.send(msg);
 				System.out.println("success发送成功");
+			}else if(type.equals("fetchUserInfoById")){
+				// 根据用户ID获取用户信息
+				user=UserInfoService.fetchUserInfoById(user.getId());
+				bs = MySerializable.object_bytes(new Gson().toJson(user));
+
+				Message msg = new Message("sys_userinfo",from,"fetchUserInfoById",bs);
+				client.send(msg);
+				System.out.println("fetch success");
 			}
 		}
 	}

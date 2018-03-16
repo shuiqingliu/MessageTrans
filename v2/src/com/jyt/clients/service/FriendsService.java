@@ -23,8 +23,8 @@ public class FriendsService {
 				+ fid + "')";
 		String sql2 = "INSERT INTO friends(uid, fid) VAlUES ('" + fid + "', '"
 				+ uid + "')";
-		String sql3="select * friends where uid='"+uid+"'AND fid='"+fid+"'";
-		String sql4="select * friends where uid='"+fid+"'AND fid='"+uid+"'";
+		String sql3="select * from friends  where uid='"+uid+"'AND fid='"+fid+"'";
+		String sql4="select * from friends where uid='"+fid+"'AND fid='"+uid+"'";
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
@@ -43,6 +43,8 @@ public class FriendsService {
 	}
 
 	public static boolean delFri(String uid, String fid) {
+
+		boolean b=false;
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 
 		String sql = "DELETE FROM friends WHERE uid = '" + uid + "' AND fid = '"
@@ -52,15 +54,13 @@ public class FriendsService {
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
-			System.out.println(sql);
-			if (stmt.execute(sql) == false) {
-				return true;
-			}
-			return false;
+			stmt.execute(sql);
+			stmt.execute(sql2);
+			b=true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
 		}
+		return b;
 	}
 
 	public static List<User> fetchFris(String uid){
