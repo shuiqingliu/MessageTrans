@@ -51,6 +51,7 @@ public class MessageForwarder extends MessageServerTcpClient {
                 case "msgGroup":
                     GroupMessage groupMessage = new MessageParser().getGroupMsgInfo(content);
                     for (String member : groupMessage.getGroupMembers()){
+                        System.out.println("Group 中 ID 为:"  + member);
                         messageBean.setTo(member);
                         messageBean.setContent(groupMessage.getMessageContent());
                         String forwardGroupMessage = new MessageParser().messageToJson(messageBean);

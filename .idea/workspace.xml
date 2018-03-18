@@ -7,12 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="963b6d39-ebe4-4a22-bae5-d9a603912462" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/Bean/GroupMessage.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/MessageBean.java" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/MessageForwarder.java" afterPath="$PROJECT_DIR$/src/MessageForwarder.java" />
-      <change beforePath="$PROJECT_DIR$/src/MessageHandler.java" afterPath="$PROJECT_DIR$/src/MessageHandler.java" />
-      <change beforePath="$PROJECT_DIR$/src/MessageParser.java" afterPath="$PROJECT_DIR$/src/MessageParser.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,12 +22,22 @@
       <file leaf-file-name="MessageForwarder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/MessageForwarder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="66" column="16" lean-forward="true" selection-start-line="66" selection-start-column="16" selection-end-line="66" selection-end-column="16" />
+            <state relative-caret-position="276">
+              <caret line="62" column="0" lean-forward="true" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
               <folding>
-                <element signature="e#3096#3097#0" expanded="true" />
-                <element signature="e#3153#3154#0" expanded="true" />
+                <element signature="e#3167#3168#0" expanded="true" />
+                <element signature="e#3224#3225#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MessageServerTcpClient.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/message/MessageServerTcpClient.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="276">
+              <caret line="328" column="15" lean-forward="false" selection-start-line="328" selection-start-column="15" selection-end-line="328" selection-end-column="15" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -40,8 +45,8 @@
       <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MessageHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="66" column="36" lean-forward="true" selection-start-line="66" selection-start-column="36" selection-end-line="66" selection-end-column="36" />
+            <state relative-caret-position="572">
+              <caret line="67" column="37" lean-forward="false" selection-start-line="67" selection-start-column="37" selection-end-line="67" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#587#588#0" expanded="true" />
@@ -120,8 +125,8 @@
       <file leaf-file-name="GroupMessage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Bean/GroupMessage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+            <state relative-caret-position="207">
+              <caret line="9" column="38" lean-forward="true" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
               <folding>
                 <element signature="e#234#235#0" expanded="true" />
                 <element signature="e#273#274#0" expanded="true" />
@@ -480,12 +485,12 @@
       <workItem from="1520258493351" duration="4987000" />
       <workItem from="1520308070414" duration="4966000" />
       <workItem from="1520517964313" duration="4780000" />
-      <workItem from="1521356366975" duration="1873000" />
+      <workItem from="1521356366975" duration="2792000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="139602000" />
+    <option name="totallyTimeSpent" value="140521000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="31" width="1920" height="973" extended-state="6" />
@@ -714,52 +719,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/message/MessageServerTcpClient.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2277">
-          <caret line="115" column="16" lean-forward="false" selection-start-line="115" selection-start-column="16" selection-end-line="115" selection-end-column="16" />
-          <folding>
-            <marker date="1516757954000" expanded="false" signature="0:104" ph="/.../" />
-            <marker date="1516757954000" expanded="false" signature="139:423" ph="..." />
-            <marker date="1516757954000" expanded="true" signature="961:1459" ph="{...}" />
-            <marker date="1516757954000" expanded="false" signature="1499:1510" ph=" { " />
-            <marker date="1516757954000" expanded="false" signature="1534:1540" ph=" }" />
-            <marker date="1516757954000" expanded="true" signature="1624:1995" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="2094:2534" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="2640:3018" ph="{...}" />
-            <marker date="1516757954000" expanded="false" signature="3055:3066" ph=" { " />
-            <marker date="1516757954000" expanded="false" signature="3085:3091" ph=" }" />
-            <marker date="1516757954000" expanded="true" signature="3133:3540" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="3565:3677" ph="{...}" />
-            <marker date="1516757954000" expanded="false" signature="3745:3756" ph=" { " />
-            <marker date="1516757954000" expanded="false" signature="3789:3795" ph=" }" />
-            <marker date="1516757954000" expanded="true" signature="3823:4430" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="4471:4612" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="4653:5000" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="5041:5388" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="5429:5707" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="5731:6551" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="6579:6974" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="7034:7248" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="7295:7502" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="7582:7809" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="7874:8092" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="8139:8342" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="8422:8640" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="8689:8894" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="8933:9131" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="9199:10019" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="10050:10537" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="10605:11188" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="11225:11381" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="11427:11636" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="11687:11901" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="11926:12323" ph="{...}" />
-            <marker date="1516757954000" expanded="true" signature="12382:12596" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/message/RemoteObjectClient.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="598">
@@ -824,20 +783,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/MessageHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="66" column="36" lean-forward="true" selection-start-line="66" selection-start-column="36" selection-end-line="66" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#587#588#0" expanded="true" />
-            <element signature="e#623#624#0" expanded="true" />
-            <element signature="e#3584#3585#0" expanded="true" />
-            <element signature="e#3649#3650#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/MessageParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="670">
@@ -878,8 +823,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Bean/GroupMessage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+        <state relative-caret-position="207">
+          <caret line="9" column="38" lean-forward="true" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
           <folding>
             <element signature="e#234#235#0" expanded="true" />
             <element signature="e#273#274#0" expanded="true" />
@@ -893,13 +838,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/message/MessageServerTcpClient.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="328" column="15" lean-forward="false" selection-start-line="328" selection-start-column="15" selection-end-line="328" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MessageHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="572">
+          <caret line="67" column="37" lean-forward="false" selection-start-line="67" selection-start-column="37" selection-end-line="67" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#587#588#0" expanded="true" />
+            <element signature="e#623#624#0" expanded="true" />
+            <element signature="e#3584#3585#0" expanded="true" />
+            <element signature="e#3649#3650#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/MessageForwarder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="66" column="16" lean-forward="true" selection-start-line="66" selection-start-column="16" selection-end-line="66" selection-end-column="16" />
+        <state relative-caret-position="276">
+          <caret line="62" column="0" lean-forward="true" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
           <folding>
-            <element signature="e#3096#3097#0" expanded="true" />
-            <element signature="e#3153#3154#0" expanded="true" />
+            <element signature="e#3167#3168#0" expanded="true" />
+            <element signature="e#3224#3225#0" expanded="true" />
           </folding>
         </state>
       </provider>
