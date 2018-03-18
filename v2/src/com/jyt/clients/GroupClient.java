@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.jyt.clients.model.Group;
+import com.jyt.clients.model.User;
+import com.jyt.clients.service.FriendsService;
 import com.jyt.clients.service.GroupService;
 import com.jyt.message.Message;
 import com.jyt.message.MessageConfig;
@@ -26,6 +28,7 @@ public class GroupClient extends MessageServerTcpClient {
 		addListener("quitGroup", new ResponseListener(this));
 		addListener("modifyGroupName", new ResponseListener(this));
 		addListener("groupMsg", new ResponseListener(this));
+		addListener("pullGroup",new ResponseListener(this));
 	}
 
 	public class ResponseListener implements MessageListener {
@@ -44,6 +47,7 @@ public class GroupClient extends MessageServerTcpClient {
 					.getContent());
 			String[] ss = new String[] { time_str, from, content };
 			String result = ArgumentString.replace(field, ss);
+			byte[] bs = null;
 			System.out.println(result);
 			if (type.equals("groupMsg")) {
 				// TODO 收到群组消息，转发给每个人
@@ -65,7 +69,7 @@ public class GroupClient extends MessageServerTcpClient {
 								sendMsg.put("to",m);
 								sendMsg.put("ft",time);
 								sendMsg.put("content",content_);
-								byte[] bs= MySerializable.object_bytes(sendMsg.toString());
+								bs= MySerializable.object_bytes(sendMsg.toString());
 
 								Message msg = new Message("sys_group", m, "msg", bs);
 								client.send(msg);
@@ -211,6 +215,14 @@ public class GroupClient extends MessageServerTcpClient {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+			}else if (type.equals("pullGroup")){
+				GroupService fs=new GroupService();
+				List<Group> list=fs.pullGroup(from);
+				Gson gson=new Gson();
+				bs = MySerializable.object_bytes(gson.toJson(list).toString());
+				Message msg = new Message("sys_group", from, "pullGroup",bs);
+				client.send(msg);
+
 			}
 
 		}

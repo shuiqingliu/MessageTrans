@@ -1,17 +1,22 @@
 package com.jyt.clients.service;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.jyt.clients.db.ConnectionPool;
 import com.jyt.clients.db.ConnectionPoolUtils;
 import com.jyt.clients.model.Group;
+import com.jyt.clients.model.User;
 
 public class GroupService {
-
+	private Connection conn=null;
+	private PreparedStatement ps=null;
+	private ResultSet rs=null;
 	public static Group getGroup(String gid) {
 		Group group = new Group();
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
@@ -36,8 +41,10 @@ public class GroupService {
 
 	public static void createGroup(Group group) {
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
-		String memstr = group.getUid();
+		//String memstr = group.getUid();
+
 		List<String> members = group.getMembers();
+		String memstr = members.get(0);
 		for (String m : members) {
 			memstr += ("、" + m);
 		}
@@ -120,6 +127,67 @@ public class GroupService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<Group> pullGroup(String id){
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+		String sql1="select group_id from t_group";
+		String sql2="select * from t_group where group_id=? limit 1";
+		List<Group> list=new ArrayList<>();
+		try {
+			conn = connPool.getConnection();
+			ps = conn.prepareStatement(sql1);
+			rs=ps.executeQuery();
+			List<String> groupidList=new ArrayList<>();
+			int i=0;
+			System.out.println(rs.toString());
+			while(rs.next()){
+				groupidList.add(rs.getString("group_id"));
+			}
+
+			for (String fid:groupidList) {
+				ps = conn.prepareStatement(sql2);
+				ps.setString(1,fid);
+				rs=ps.executeQuery();
+				if(rs.next()){
+					Group group = new Group();
+					group.setGid(rs.getString("group_id"));
+					group.setGname(rs.getString("group_name"));
+					group.setMember(rs.getString("members"));
+					list.add(group);
+//					User user=new User();
+//					user.setId(rs.getString("id"));
+//					user.setName(rs.getString("name"));
+//					user.setDepartment(rs.getString("department"));
+//					user.setPhone(rs.getString("phone"));
+//					user.setEmail(rs.getString("email"));
+//
+//					list.add(user);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			this.close();
+		}
+		return list;
+	}
+
+	private void close(){
+		try {
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+			if(conn!=null){
+				conn.close();
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
 	}
 
 }
