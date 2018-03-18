@@ -1,4 +1,4 @@
-/**
+package Bean; /**
  * Created by qingliu on 1/24/18.
  */
 
@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Class MessageBean
+ * Class Bean.MessageBean
  * 用来存储 json 解析出来的消息内容*/
 public class MessageBean{
 

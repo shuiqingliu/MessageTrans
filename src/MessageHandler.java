@@ -1,11 +1,10 @@
+import Bean.MessageBean;
 import com.jyt.message.Message;
-import com.jyt.message.MessageConfig;
 import com.jyt.util.MySerializable;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 /**
  * Created by qingliu on 1/15/18.
@@ -39,7 +38,7 @@ public class MessageHandler implements Runnable{
             while ( (socketLine = readerData.readLine()) != null ){
                 jsonData.append(socketLine);
                 System.out.println("接收到的消息：" + socketLine);
-                //将 json 解析得到 MessageBean 对象
+                //将 json 解析得到 Bean.MessageBean 对象
                 messageParser = new MessageParser();
                 messageBean = messageParser.getMessageBean(socketLine);
                 //若为 login 类型的消息则创建连接,否则直接发送。
@@ -58,11 +57,19 @@ public class MessageHandler implements Runnable{
                 if (ClientManager.getClientManager().clientList.get(messageBean.getFrom()) == null){
                     this.startForwardThread(messageBean.getFrom());
                 }
-                if (messageBean.getType().equals("msg")) {
-                    forwarder.send(createMessage(socketLine));
-                    //打印发送的消息，并将暂存的消息置空
-                    System.out.println("jsonData:" + jsonData.toString());
-                    jsonData = new StringBuffer("");
+
+                switch (messageBean.getType()){
+                    case "msg":
+                      forwarder.send(createMessage(socketLine));
+                        //打印发送的消息，并将暂存的消息置空
+                        System.out.println("jsonData:" + jsonData.toString());
+                        jsonData = new StringBuffer("");
+                    case "msgGroup":
+                        forwarder.send(createMessage(socketLine));
+                        //打印发送的消息，并将暂存的消息置空
+                        System.out.println("jsonData:" + jsonData.toString());
+                        jsonData = new StringBuffer("");
+
                 }
             }
         } catch (IOException e) {

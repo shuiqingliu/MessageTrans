@@ -1,13 +1,14 @@
+import Bean.GroupMessage;
+import Bean.MessageBean;
 import com.jyt.message.Message;
 import com.jyt.message.MessageListener;
 import com.jyt.message.MessageServerTcpClient;
-import com.jyt.util.ArgumentString;
-import com.jyt.util.CountTime;
 import com.jyt.util.MyDate;
 import com.jyt.util.MySerializable;
 
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by qingliu on 1/18/18.
@@ -37,19 +38,34 @@ public class MessageForwarder extends MessageServerTcpClient {
             MessageBean messageBean = new MessageBean();
             messageBean.setType(type);
             messageBean.setFrom(from);
-            messageBean.setTo(to);
-            messageBean.setContent(content);
             messageBean.setTime(message.getCreated());
-            //将 messageBean 转为 json 字符串
-            String forwardMessage = new MessageParser().messageToJson(messageBean);
-            System.out.println("forwardMessage:" + forwardMessage);
+            switch (type){
+                case "msg":
+                    //转发 Message json
+                    messageBean.setTo(message.getTo());
+                    messageBean.setContent(content);
+                    String forwardMessage = new MessageParser().messageToJson(messageBean);
+                    ClientManager.getClientManager().sendMessage(to,forwardMessage);
+                    //将 messageBean 转为 json 字符串
+                    System.out.println("forwardMessage:" + forwardMessage);
+                case "msgGroup":
+                    GroupMessage groupMessage = new MessageParser().getGroupMsgInfo(content);
+                    for (String member : groupMessage.getGroupMembers()){
+                        messageBean.setTo(member);
+                        messageBean.setContent(groupMessage.getMessageContent());
+                        String forwardGroupMessage = new MessageParser().messageToJson(messageBean);
+                        ClientManager.getClientManager().sendMessage(to,forwardGroupMessage);
+                        //将 messageBean 转为 json 字符串
+                        System.out.println("forwardMessage:" + forwardGroupMessage);
+                    }
+            }
+
             /*客户端列表去重
             *不需要去重，因为 HashMap 的 put 方法当 key 一致的时候原来的值会被替换
             * 详见：https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html#put(K,%20V)
             *removeClosedSocket(ClientManager.getClientManager());
             * */
             //将消息发送给客户端
-            ClientManager.getClientManager().sendMessage(to,forwardMessage);
         }
     }
 
