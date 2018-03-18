@@ -149,12 +149,17 @@ public class GroupService {
 				ps = conn.prepareStatement(sql2);
 				ps.setString(1,fid);
 				rs=ps.executeQuery();
+
+
 				if(rs.next()){
-					Group group = new Group();
-					group.setGid(rs.getString("group_id"));
-					group.setGname(rs.getString("group_name"));
-					group.setMember(rs.getString("members"));
-					list.add(group);
+					String[] groupList = rs.getString("members").split("¡¢");
+					List<String> groupMemberList=Arrays.asList(groupList);
+					if (groupMemberList.contains(id)) {
+						Group group = new Group();
+						group.setGid(rs.getString("group_id"));
+						group.setGname(rs.getString("group_name"));
+						group.setMember(rs.getString("members"));
+						list.add(group);
 //					User user=new User();
 //					user.setId(rs.getString("id"));
 //					user.setName(rs.getString("name"));
@@ -163,6 +168,7 @@ public class GroupService {
 //					user.setEmail(rs.getString("email"));
 //
 //					list.add(user);
+					}
 				}
 			}
 		} catch (Exception e) {

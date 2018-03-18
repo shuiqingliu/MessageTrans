@@ -176,18 +176,6 @@ public class GroupClient extends MessageServerTcpClient {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				// 删除成员，直接修改数据库，通知每个人
-//				Group group=new Gson().fromJson(content, Group.class);
-//				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
-//				group.setMembers(members);
-//				if(members!=null){
-//					for(String m : members){
-//						Message msg = new Message("sys_group", m, "delMemberRes", message.getContent());
-//						client.send(msg);
-//					}
-//					// TODO 更新数据库
-//					GroupService.delMember(group);
-//				}
 			}else if(type.equals("quitGroup")){
 				// 退群，修改数据库，通知每个人
 
@@ -224,7 +212,6 @@ public class GroupClient extends MessageServerTcpClient {
 				client.send(msg);
 
 			}
-
 		}
 	}
 
