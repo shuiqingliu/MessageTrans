@@ -22,6 +22,7 @@ public class MessageForwarder extends MessageServerTcpClient {
         addListener("login",new ResponseListerner());
         addListener("msg",new ResponseListerner());
         addListener("addFri",new ResponseListerner());
+        addListener("msgGroup",new ResponseListerner());
     }
 
     public class ResponseListerner implements MessageListener{
@@ -53,9 +54,10 @@ public class MessageForwarder extends MessageServerTcpClient {
                     for (String member : groupMessage.getGroupMembers()){
                         System.out.println("Group 中 ID 为:"  + member);
                         messageBean.setTo(member);
+                        System.out.println("发送的消息为: " + groupMessage.getMessageContent());
                         messageBean.setContent(groupMessage.getMessageContent());
                         String forwardGroupMessage = new MessageParser().messageToJson(messageBean);
-                        ClientManager.getClientManager().sendMessage(to,forwardGroupMessage);
+                        ClientManager.getClientManager().sendMessage(member,forwardGroupMessage);
                         //将 messageBean 转为 json 字符串
                         System.out.println("forwardMessage:" + forwardGroupMessage);
                     }
