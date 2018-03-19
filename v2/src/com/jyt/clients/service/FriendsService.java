@@ -164,6 +164,34 @@ public class FriendsService {
 		return list;
 	}
 
+	public List<User> pullUser(){
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+		String sql="select * from user";
+		List<User> list=new ArrayList<>();
+		try {
+			conn = connPool.getConnection();
+			ps = conn.prepareStatement(sql);
+			rs=ps.executeQuery();
+			//List<String> fidList=new ArrayList<>();
+			//int i=0;
+			//System.out.println(rs.toString());
+			while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getString("id"));
+				user.setName(rs.getString("name"));
+				user.setDepartment(rs.getString("department"));
+				user.setPhone(rs.getString("phone"));
+				user.setEmail(rs.getString("email"));
+				list.add(user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			this.close();
+		}
+		return list;
+	}
+
 	private void close(){
 		try {
 			if(rs!=null){

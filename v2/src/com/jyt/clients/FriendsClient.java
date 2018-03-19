@@ -25,6 +25,7 @@ public class FriendsClient extends MessageServerTcpClient {
 		addListener("delFri", new ResponseListener(this));
 		addListener("addFriRes",new ResponseListener(this));
 		addListener("pullFri",new ResponseListener(this));
+		addListener("pullUser",new ResponseListener(this));
 	}
 
 
@@ -124,8 +125,15 @@ public class FriendsClient extends MessageServerTcpClient {
 				FriendsService fs=new FriendsService();
 				List<User> list=fs.pullFri(from);
 				Gson gson=new Gson();
-				bs = MySerializable.object_bytes(gson.toJson(list).toString());
+				bs = MySerializable.object_bytes(gson.toJson(list));
 				Message msg = new Message("sys_friend", from, "pullFri", bs);
+				client.send(msg);
+			} else if(type.equals("pullUser")){
+				FriendsService fs=new FriendsService();
+				List<User> list=fs.pullUser();
+				Gson gson=new Gson();
+				bs = MySerializable.object_bytes(gson.toJson(list));
+				Message msg = new Message("sys_friend", from, "pullUser", bs);
 				client.send(msg);
 			}
 		}
