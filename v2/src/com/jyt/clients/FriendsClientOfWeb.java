@@ -48,13 +48,11 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
 			String res = "";
 			byte[] bs = null;
 
-
-
-
 			if (type.equals("delFri")) {
 				// 删除好友处理
                 String uid="";
                 String fid= "";
+
                 try {
                     JSONObject json=new JSONObject(content);
                     fid = json.getString("fid");
