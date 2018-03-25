@@ -210,6 +210,45 @@ public class GroupServiceOfWeb {
 		return "[" + groupList + "]";
 	}
 
+	public static String getGroupMembers(int gid){
+		String groupMembersList = "";
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+		String sql = "SELECT u.id as userid, u.name as username, u.avatar as avatar, u.department as department " +
+				" FROM group_user INNER JOIN user as u" +
+				" WHERE group_user.groupid = ?" +
+				" AND group_user.userid=u.id";
+
+		Connection connection = null;
+		try {
+			connection = connPool.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1,gid);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			int i=0;
+			while (resultSet.next()){
+				if(i!=0){
+					groupMembersList += ",";
+				}
+				int userid = resultSet.getInt("userid");
+				String username = resultSet.getString("username");
+				if(username==null)username="NO_NAME";
+				String avatar = resultSet.getString("avatar");
+				if(avatar==null)avatar="NO_AVATAR";
+				String department = resultSet.getString("department");
+				if(department==null)department="NO_DEPARTMENT";
+				groupMembersList += "{'userid':'"+userid + "','username':'" +username+"','avatar':'"+avatar+"','department':'"+department+"'}";
+				i++;
+			}
+
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return "[" + groupMembersList + "]";
+
+	}
+
 
 
 
