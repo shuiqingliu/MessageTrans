@@ -42,7 +42,7 @@ public class UserInfoClient extends MessageServerTcpClient{
 			User user = new Gson().fromJson(content, User.class);
 			if(type.equals("fetchUserInfo")){
 				// 获取用户信息
-				user=UserInfoService.fetchUserInfo(user.getName());
+				user=UserInfoService.fetchUserInfo(user.getId());
 
 
 				bs = MySerializable.object_bytes(new Gson().toJson(user));
