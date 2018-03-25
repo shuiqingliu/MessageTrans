@@ -62,8 +62,8 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
                 }
 
 
-				FriendsServiceOfWeb fs=new FriendsServiceOfWeb();
-                boolean b = fs.delFri(uid, fid);
+
+                boolean b = FriendsServiceOfWeb.delFri(uid, fid);
                 if(b){
                     res="{'success':'yes'}";
                 }else{
@@ -74,7 +74,6 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
 				client.send(msg);
 			} else if(type.equals("fetchFris")){
 
-
                 String uid="";
                 try {
                     JSONObject json=new JSONObject(content);
@@ -83,13 +82,14 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
                     e.printStackTrace();
                 }
 
-				FriendsServiceOfWeb fs=new FriendsServiceOfWeb();
-				List<User> list=fs.fetchFris(uid);
+
+				List<User> list=FriendsServiceOfWeb.fetchFris(uid);
 				Gson gson=new Gson();
 				bs = MySerializable.object_bytes(gson.toJson(list).toString());
 				Message msg = new Message("sys_friends", from, "fetchFris", bs);
 				client.send(msg);
 			}
+
 		}
 	}
 
