@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.jyt.clients.model.User;
 import com.jyt.clients.service.FriendsServiceOfWeb;
+import com.jyt.clients.service.UserInfoService;
 import com.jyt.message.Message;
 import com.jyt.message.MessageConfig;
 import com.jyt.message.MessageListener;
@@ -21,9 +22,9 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
 
 	public FriendsClientOfWeb(String server_ip, String server_name) {
 		super(server_ip, server_name, "sys_friends");
-		//addListener("addFri", new ResponseListener(this));
+		addListener("addFri", new ResponseListener(this));
 		addListener("delFri", new ResponseListener(this));
-		//addListener("addFriRes",new ResponseListener(this));
+		addListener("addFriRes",new ResponseListener(this));
 		addListener("fetchFris",new ResponseListener(this));
 	}
 
@@ -45,6 +46,14 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
 				System.out.println(msg);
 			}
 		}
+
+		public void noticeToOne(String member, String msgType, String content){
+				byte[] bs = MySerializable.object_bytes(content);
+				Message msg = new Message("sys_friends", member, msgType, bs);
+				client.send(msg);
+				System.out.println(msg);
+		}
+
 
 		public void messagePerformed(Message message) {
 			String field = "**************\n%1 from %2 \n%3\n**************";
@@ -99,7 +108,46 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
 				bs = MySerializable.object_bytes(gson.toJson(list).toString());
 				Message msg = new Message("sys_friends", from, "fetchFris", bs);
 				client.send(msg);
+			}else if(type.equals("addFri")){
+
+				String fid1="";
+				try {
+					JSONObject json=new JSONObject(content);
+					 fid1 = json.getString("fid1");
+					String fid2 = json.getString("fid2");
+					String message1 = json.getString("message");
+
+					User user = UserInfoService.fetchUserInfoById(fid1);
+
+					noticeToOne(fid2,"addFri","{'fname1':'"+user.getName()+"','fid1':'"+fid1+"','avatar':'"+user.getAvatar()+"','message':'"+message1+"'}");
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}else if(type.equals("addFriRes")){
+
+				String fid1="";
+				try {
+					JSONObject json=new JSONObject(content);
+					fid1 = json.getString("fid1");
+					String fid2 = json.getString("fid2");
+					String message1 = json.getString("message");
+					if(message1.equals("yes")) {
+
+						FriendsServiceOfWeb.addFri(fid1, fid2);
+
+						User user1 = FriendsServiceOfWeb.findUser(fid1);
+						User user2 = FriendsServiceOfWeb.findUser(fid2);
+
+						noticeToOne(fid1, "addFriRes", "{'userID':'"+user2.getId()+"','userName':'"+user2.getName()+"','avatar':'"+user2.getAvatar()+"','department':'"+user2.getDepartment()+"','phone':'"+user2.getPhone()+"','email':'"+user2.getEmail()+"'}");
+						noticeToOne(fid2, "addFriRes", "{'userID':'"+user1.getId()+"','userName':'"+user1.getName()+"','avatar':'"+user1.getAvatar()+"','department':'"+user1.getDepartment()+"','phone':'"+user1.getPhone()+"','email':'"+user1.getEmail()+"'}");
+					}
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
+
 
 		}
 	}

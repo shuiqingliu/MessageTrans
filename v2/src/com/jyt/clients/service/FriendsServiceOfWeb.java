@@ -17,23 +17,20 @@ public class FriendsServiceOfWeb {
 	private PreparedStatement ps=null;
 	private ResultSet rs=null;
 
-	public  void addFri(String uid, String fid) {
+	public static void addFri(String uid, String fid) {
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 		String sql1 = "INSERT INTO friends(uid, fid) VAlUES ('" + uid + "', '"
 				+ fid + "')";
 		String sql2 = "INSERT INTO friends(uid, fid) VAlUES ('" + fid + "', '"
 				+ uid + "')";
 		String sql3="select * from friends where uid='"+uid+"'AND fid='"+fid+"'";
-		String sql4="select * from friends where uid='"+fid+"'AND fid='"+uid+"'";
+
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
-			rs=stmt.executeQuery(sql3);
+			ResultSet rs = stmt.executeQuery(sql3);
 			if(!rs.next()){
 				stmt.execute(sql1);
-			}
-			rs=stmt.executeQuery(sql4);
-			if(!rs.next()){
 				stmt.execute(sql2);
 			}
 		} catch (Exception e) {
@@ -124,45 +121,6 @@ public class FriendsServiceOfWeb {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public List<User> pullFri(String id){
-		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
-		String sql1="select fid from friends where uid='"+id+"'";
-		String sql2="select * from user where id=? limit 1";
-		List<User> list=new ArrayList<>();
-		try {
-			conn = connPool.getConnection();
-			ps = conn.prepareStatement(sql1);
-			rs=ps.executeQuery();
-			List<String> fidList=new ArrayList<>();
-			int i=0;
-			System.out.println(rs.toString());
-			while(rs.next()){
-				fidList.add(rs.getString("fid"));
-			}
-
-			for (String fid:fidList) {
-				ps = conn.prepareStatement(sql2);
-				ps.setString(1,fid);
-				rs=ps.executeQuery();
-				if(rs.next()){
-					User user=new User();
-					user.setId(rs.getString("id"));
-					user.setName(rs.getString("name"));
-					user.setDepartment(rs.getString("department"));
-					user.setPhone(rs.getString("phone"));
-					user.setEmail(rs.getString("email"));
-
-					list.add(user);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			this.close();
-		}
-		return list;
 	}
 
 	private void close(){
