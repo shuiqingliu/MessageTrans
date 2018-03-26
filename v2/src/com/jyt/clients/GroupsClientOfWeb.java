@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.jyt.clients.model.Group;
 import com.jyt.clients.model.User;
+import com.jyt.clients.service.FriendsServiceOfWeb;
 import com.jyt.clients.service.GroupService;
 import com.jyt.clients.service.GroupServiceOfWeb;
 import com.jyt.clients.service.UserInfoService;
@@ -33,6 +34,8 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
         addListener("addMemberToGroup", new ResponseListener(this));
         addListener("delMember", new ResponseListener(this));
         addListener("modifyGroupName", new ResponseListener(this));
+        addListener("modifyGroupAvatar", new ResponseListener(this));
+        addListener("modifyUserAvatar", new ResponseListener(this));
     }
 
 
@@ -42,13 +45,18 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
         //公用方法，
         //但是群消息不用这个，因为群消息不发给自己；
         public void noticeToAllGroupMembers(List<String> membersList, String msgType, String content){
-
             for(String memberId:membersList){
                 byte[] bs = MySerializable.object_bytes(content);
                 Message msg = new Message("sys_groups", memberId, msgType, bs);
                 client.send(msg);
                 System.out.println(msg);
             }
+        }
+        public void noticeToOne(String member, String msgType, String content){
+            byte[] bs = MySerializable.object_bytes(content);
+            Message msg = new Message("sys_groups", member, msgType, bs);
+            client.send(msg);
+            System.out.println(msg);
         }
 
         public ResponseListener(GroupsClientOfWeb client) {
@@ -218,18 +226,57 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                 }
 
             }else if (type.equals("modifyGroupName")) {
-                // 拉好友入群
+                // 更改群头像
                 String res = "{'success':'no'}";
                 boolean success =false;
                 try {
                     JSONObject jsonObject = new JSONObject(content);
                     String groupname = jsonObject.getString("groupname");
                     String groupid = jsonObject.getString("groupid");
+                    String uid = jsonObject.getString("uid");
+
+                    User user = FriendsServiceOfWeb.findUser(uid);
+
                     int gid = Integer.parseInt(groupid);
                     res  = GroupServiceOfWeb.modifyGroupName(gid,groupname );
 
                     ArrayList<String> groupMembersId = GroupServiceOfWeb.getGroupMembersId(gid);
-                    noticeToAllGroupMembers(groupMembersId,"modifyGroupNameRes","{'gid':'"+gid+"','gname':'"+groupname+"'}");
+                    noticeToAllGroupMembers(groupMembersId,"modifyGroupNameRes","{'gid':'"+gid+"','gname':'"+groupname+"','modifyerName':'"+user.getName()+"'}");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if (type.equals("modifyGroupAvatar")) {
+                // 更改群头像
+                String res = "{'success':'no'}";
+                boolean success =false;
+                try {
+                    JSONObject jsonObject = new JSONObject(content);
+                    String groupAvatar = jsonObject.getString("groupAvatar");
+                    String groupid = jsonObject.getString("groupid");
+                    String uid = jsonObject.getString("uid");
+
+                    User user = FriendsServiceOfWeb.findUser(uid);
+
+                    int gid = Integer.parseInt(groupid);
+                    res  = GroupServiceOfWeb.modifyGroupAvatar(gid,groupAvatar );
+
+                    ArrayList<String> groupMembersId = GroupServiceOfWeb.getGroupMembersId(gid);
+                    noticeToAllGroupMembers(groupMembersId,"modifyGroupAvatarRes","{'gid':'"+gid+"','gavatar':'"+groupAvatar+"','modifyerName':'"+user.getName()+"'}");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if (type.equals("modifyUserAvatar")) {
+                // 更改群头像
+                String res = "{'success':'no'}";
+                boolean success =false;
+                try {
+                    JSONObject jsonObject = new JSONObject(content);
+                    String userAvatar = jsonObject.getString("UserAvatar");
+                    String uid = jsonObject.getString("uid");
+
+                    String s = GroupServiceOfWeb.modifyUserAvatar(uid, userAvatar);
+
+                    noticeToOne(uid,"modifyUserAvatarRes","{'avatar':'"+userAvatar+"','uid':'"+uid+"'}");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

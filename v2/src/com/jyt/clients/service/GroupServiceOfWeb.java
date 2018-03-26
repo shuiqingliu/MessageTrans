@@ -280,6 +280,47 @@ public class GroupServiceOfWeb {
 		return ids;
 	}
 
+	//11-修改群头像
+	public static String modifyGroupAvatar(int groupid, String groupavatar){
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
+		String sql = "UPDATE groups SET groupavatar=? WHERE groupid = ?";
+		Connection connection = null;
+		String res = "{'success':'no'}";
+		try {
+			connection = connPool.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1,groupavatar);
+			preparedStatement.setInt(2,groupid);
+			int i = preparedStatement.executeUpdate();
+			if(i>0){
+				res ="{'success':'yes'}";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	//11-修改个人像
+	public static String modifyUserAvatar(String uid, String useravatar){
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
+		String sql = "UPDATE user SET vatar=? WHERE id = ?";
+		Connection connection = null;
+		String res = "{'success':'no'}";
+		try {
+			connection = connPool.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1,useravatar);
+			preparedStatement.setString(2,uid);
+			int i = preparedStatement.executeUpdate();
+			if(i>0){
+				res ="{'success':'yes'}";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
 
 
 
