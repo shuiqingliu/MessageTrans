@@ -3,6 +3,7 @@ package com.jyt.clients.service;
 import com.jyt.clients.db.ConnectionPool;
 import com.jyt.clients.db.ConnectionPoolUtils;
 import com.jyt.clients.model.Group;
+import com.jyt.clients.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -254,7 +255,8 @@ public class GroupServiceOfWeb {
 
 		return "[" + groupMembersList + "]";
 	}
-	//10-获取id为x的群组的成员（只要成员id）
+
+	//10-获取id为x的群组的成员（只要成员id,用于向他们发消息；）
 	public static ArrayList<String> getGroupMembersId(int gid){
 		ArrayList<String> ids = new ArrayList<>();
 		String groupMembersList = "";
@@ -323,117 +325,33 @@ public class GroupServiceOfWeb {
 		return res;
 	}
 
+	//12-根据名字搜索好友
+	public static List<User> searchFriendByName(String searchName){
 
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+		ArrayList<User> users = new ArrayList<>();
 
+		String sql = "select * from user where NAME LIKE '%"+searchName+"%'";
 
-	public static Group getGroups(String gid) {
-		Group group = new Group();
-		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
-		String sql = "SELECT * FROM t_group WHERE group_id='" + gid + "'";
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
-			if (rs.next()) {
-				String members=rs.getString("members");
-				String[] m=members.split("、");
-				group.setMembers(Arrays.asList(m));
-				return group;
-			} else {
-				return group;
+
+			while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getString("id"));
+				user.setAvatar(rs.getString("avatar"));
+				user.setDepartment(rs.getString("department"));
+				user.setEmail(rs.getString("email"));
+				user.setName(rs.getString("name"));
+				user.setPhone(rs.getString("phone"));
+				users.add(user);
 			}
+			return users;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return group;
+			return users;
 		}
 	}
-
-	public static void createGroup(Group group) {
-		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
-		String memstr = group.getUid();
-		List<String> members = group.getMembers();
-		for (String m : members) {
-			memstr += ("、" + m);
-		}
-		String sql = "INSERT INTO t_group VALUES('" + group.getGid() + "', '"
-				+ group.getGname() + "', '" + memstr + "')";
-		try {
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
-			stmt.execute(sql);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void pullMember(Group group) {
-		List<String> members = group.getMembers();
-		String memstr = "";
-		for (String m : members) {
-			memstr += (m + "、");
-		}
-		memstr += group.getMid();
-		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_id='"+group.getGid()+"'";
-		try {
-			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
-			stmt.execute(sql);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void modifyGroupName(Group group) {
-		String sql = "UPDATE t_group SET group_name='" + group.getGname() + "' WHERE group_id='"+group.getGid()+"'";
-		try {
-			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
-			stmt.execute(sql);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void delMember(Group group) {
-		List<String> members = group.getMembers();
-		String memstr = "";
-		for (String m : members) {
-			if(!m.equals(group.getMid())){
-				memstr += (m + "、");
-			}	
-		}
-		memstr=memstr.substring(0, memstr.length() - 1);
-		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_id='"+group.getGid()+"'";
-		try {
-			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
-			stmt.execute(sql);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void quitGroup(Group group) {
-		List<String> members = group.getMembers();
-		String memstr = "";
-		for (String m : members) {
-			if(!m.equals(group.getUid())){
-				memstr += (m + "、");
-			}	
-		}
-		memstr=memstr.substring(0, memstr.length() - 1);
-		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_name='"+group.getGname()+"'";
-		try {
-			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
-			stmt.execute(sql);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

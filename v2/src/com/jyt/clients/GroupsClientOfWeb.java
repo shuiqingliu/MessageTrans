@@ -37,6 +37,7 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
         addListener("modifyGroupName", new ResponseListener(this));
         addListener("modifyGroupAvatar", new ResponseListener(this));
         addListener("modifyUserAvatar", new ResponseListener(this));
+        addListener("searchFriendByName", new ResponseListener(this));
     }
 
 
@@ -167,6 +168,7 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                         String s = (String) members1.get(i);
                         members.add(s);
                     }
+
                     if (members.size() != 0) {
                         // TODO 更新数据库
                         group = GroupServiceOfWeb.createGroup(uid, members);
@@ -301,6 +303,24 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                     String s = GroupServiceOfWeb.modifyUserAvatar(uid, userAvatar);
 
                     noticeToOne(uid,"modifyUserAvatarRes","{'avatar':'"+userAvatar+"','uid':'"+uid+"'}");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if (type.equals("searchFriendByName")) {
+                // 更改群头像
+                String res = "{'success':'no'}";
+                boolean success =false;
+                try {
+                    JSONObject jsonObject = new JSONObject(content);
+                    String searchName = jsonObject.getString("searchName");
+                    String uid = jsonObject.getString("uid");
+
+                    //String s = GroupServiceOfWeb.modifyUserAvatar(uid, searchName);
+                    List<User> users = GroupServiceOfWeb.searchFriendByName(searchName);
+
+                    Gson gson=new Gson();
+
+                    noticeToOne(from,"searchFriendByName",gson.toJson(users).toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
