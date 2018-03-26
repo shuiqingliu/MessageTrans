@@ -14,6 +14,7 @@ import com.jyt.util.MySerializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FriendsClientOfWeb extends MessageServerTcpClient {
@@ -33,6 +34,16 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
 
 		public ResponseListener(FriendsClientOfWeb client) {
 			this.client = client;
+		}
+
+		public void noticeToFriends(List<String> membersList, String msgType, String content){
+
+			for(String memberId:membersList){
+				byte[] bs = MySerializable.object_bytes(content);
+				Message msg = new Message("sys_friends", memberId, msgType, bs);
+				client.send(msg);
+				System.out.println(msg);
+			}
 		}
 
 		public void messagePerformed(Message message) {
@@ -61,17 +72,17 @@ public class FriendsClientOfWeb extends MessageServerTcpClient {
                     e.printStackTrace();
                 }
 
+                boolean a = FriendsServiceOfWeb.delFri(uid, fid);
+				boolean b = FriendsServiceOfWeb.delFri(fid, uid);
 
+				ArrayList<String> friend = new ArrayList<>();
+				friend.add(fid);
+				ArrayList<String> somebody = new ArrayList<>();
+				somebody.add(uid);
 
-                boolean b = FriendsServiceOfWeb.delFri(uid, fid);
-                if(b){
-                    res="{'success':'yes'}";
-                }else{
-                    res="{'sucess':'no'}";
-                }
-				bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
-				Message msg = new Message("sys_friends", from, "delFri", bs);
-				client.send(msg);
+				noticeToFriends(friend,"delFriRes","{'fid':'"+uid+"'}");
+				noticeToFriends(somebody,"delFriRes","{'fid':'"+fid+"'}");
+
 			} else if(type.equals("fetchFris")){
 
                 String uid="";
