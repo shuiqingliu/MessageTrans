@@ -304,7 +304,7 @@ public class GroupServiceOfWeb {
 	//11-修改个人像
 	public static String modifyUserAvatar(String uid, String useravatar){
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
-		String sql = "UPDATE user SET vatar=? WHERE id = ?";
+		String sql = "UPDATE user SET avatar = ? WHERE id = ?";
 		Connection connection = null;
 		String res = "{'success':'no'}";
 		try {
@@ -313,6 +313,7 @@ public class GroupServiceOfWeb {
 			preparedStatement.setString(1,useravatar);
 			preparedStatement.setString(2,uid);
 			int i = preparedStatement.executeUpdate();
+
 			if(i>0){
 				res ="{'success':'yes'}";
 			}

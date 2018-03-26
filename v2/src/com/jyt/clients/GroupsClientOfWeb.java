@@ -29,6 +29,7 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
         super(server_ip, server_name, "sys_groups");
 
         addListener("groupMsg", new ResponseListener(this));
+        addListener("groupMsg_pic", new ResponseListener(this));
         addListener("createGroup", new ResponseListener(this));
         addListener("getGroupListOfUser", new ResponseListener(this));
         addListener("addMemberToGroup", new ResponseListener(this));
@@ -126,6 +127,29 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                         if(from1.equals(userid)) continue;
                         byte[] bs = MySerializable.object_bytes(content);
                         Message msg = new Message("sys_groups", userid, "groupMsg", bs);
+                        client.send(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if(type.equals("groupMsg_pic")){
+                //ÈºÏûÏ¢************************************
+                System.out.println(content);
+                try {
+                    JSONObject json=new JSONObject(content);
+                    String gid = json.getString("gid");
+                    String from1 = json.getString("uid");
+
+                    String groupMembers = GroupServiceOfWeb.getGroupMembers(Integer.parseInt(gid));
+                    System.out.println(groupMembers);
+                    JSONArray jsonArray = new JSONArray(groupMembers);
+                    for(int i =0;i<jsonArray.length();i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        String userid = jsonObject.getString("userid");
+                        if(from1.equals(userid)) continue;
+                        byte[] bs = MySerializable.object_bytes(content);
+                        Message msg = new Message("sys_groups", userid, "groupMsg_pic", bs);
                         client.send(msg);
                     }
                 } catch (JSONException e) {
