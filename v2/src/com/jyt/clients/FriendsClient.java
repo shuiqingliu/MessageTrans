@@ -91,6 +91,7 @@ public class FriendsClient extends MessageServerTcpClient {
 					//在friend表中添加
 					FriendsService fs=new FriendsService();
 					fs.addFri(from,toUserId);
+
 					//给from发送添加
 					User user=FriendsService.findUser(toUserId);
 					JSONObject userJson=new JSONObject();
