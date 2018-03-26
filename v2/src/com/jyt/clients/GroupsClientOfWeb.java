@@ -3,8 +3,10 @@ package com.jyt.clients;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.jyt.clients.model.Group;
+import com.jyt.clients.model.User;
 import com.jyt.clients.service.GroupService;
 import com.jyt.clients.service.GroupServiceOfWeb;
+import com.jyt.clients.service.UserInfoService;
 import com.jyt.message.Message;
 import com.jyt.message.MessageConfig;
 import com.jyt.message.MessageListener;
@@ -25,21 +27,29 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
     public GroupsClientOfWeb(String server_ip, String server_name) {
         super(server_ip, server_name, "sys_groups");
 
-        addListener("pullMember", new ResponseListener(this));
-        addListener("delMember", new ResponseListener(this));
-        addListener("quitGroup", new ResponseListener(this));
-        addListener("modifyGroupName", new ResponseListener(this));
-
         addListener("groupMsg", new ResponseListener(this));
         addListener("createGroup", new ResponseListener(this));
         addListener("getGroupListOfUser", new ResponseListener(this));
         addListener("addMemberToGroup", new ResponseListener(this));
-        addListener("delMemberFromGroup", new ResponseListener(this));
+        addListener("delMember", new ResponseListener(this));
         addListener("modifyGroupName", new ResponseListener(this));
     }
 
+
     public class ResponseListener implements MessageListener {
         GroupsClientOfWeb client = null;
+
+        //公用方法，
+        //但是群消息不用这个，因为群消息不发给自己；
+        public void noticeToAllGroupMembers(List<String> membersList, String msgType, String content){
+
+            for(String memberId:membersList){
+                byte[] bs = MySerializable.object_bytes(content);
+                Message msg = new Message("sys_groups", memberId, msgType, bs);
+                client.send(msg);
+                System.out.println(msg);
+            }
+        }
 
         public ResponseListener(GroupsClientOfWeb client) {
             this.client = client;
@@ -67,8 +77,8 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
 
                     Group group = GroupService.getGroup(groupId);
                     List<String> members = group.getMembers();
-//					String[] userids = jsonObject.getString("member").split("、");
-//					List<String> members= Arrays.asList(userids);
+					//String[] userids = jsonObject.getString("member").split("、");
+					//List<String> members= Arrays.asList(userids);
                     if (members != null) {
                         for (String m : members) {
                             if (!m.equals(from)) {
@@ -91,7 +101,7 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                     e.printStackTrace();
                 }
             } else if(type.equals("groupMsg")){
-
+                //群消息************************************
                 System.out.println(content);
                 try {
                     JSONObject json=new JSONObject(content);
@@ -103,23 +113,21 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                     JSONArray jsonArray = new JSONArray(groupMembers);
                     for(int i =0;i<jsonArray.length();i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
+
                         String userid = jsonObject.getString("userid");
                         if(from1.equals(userid)) continue;
                         byte[] bs = MySerializable.object_bytes(content);
                         Message msg = new Message("sys_groups", userid, "groupMsg", bs);
                         client.send(msg);
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }else if (type.equals("createGroup")) {
                 String group = "";
-                // 创建群组，通知每个人
+                ArrayList<String> members = new ArrayList<>();
+                // 创建群组，通知每个人***********************
                 try {
-                    ArrayList<String> members = new ArrayList<>();
                     JSONObject _content = new JSONObject(content);
                     String uid = _content.getString("uid");
                     JSONArray members1 = _content.getJSONArray("members");
@@ -130,24 +138,12 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                     if (members.size() != 0) {
                         // TODO 更新数据库
                         group = GroupServiceOfWeb.createGroup(uid, members);
+
+                        noticeToAllGroupMembers(members, "createGroupRes", group);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                String res = group;
-                byte[] bs = null;
-                bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
-                Message msg = new Message("sys_groups", from, "createGroup", bs);
-                client.send(msg);
-//				Group group=new Gson().fromJson(content, Group.class);
-//				List<String> members=group.getMembers();
-//				for(String m : members){
-//					Message msg = new Message("sys_group", m, "createGroupRes", message.getContent());
-//					client.send(msg);
-//				}
-                // TODO 更新数据库
-                //GroupService.createGroup(group);
             } else if (type.equals("getGroupListOfUser")) {
                 // 创建群组，通知每个人
                 String res = "";
@@ -170,42 +166,56 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                 boolean success =false;
                 try {
                     JSONObject jsonObject = new JSONObject(content);
-                    String fid = jsonObject.getString("fid");
-                    String groupid = jsonObject.getString("groupid");
+                    String fid = jsonObject.getString("mid");
+                    String groupid = jsonObject.getString("gid");
+                    String uid = jsonObject.getString("uid");
                     int gid = Integer.parseInt(groupid);
 
                     success  = GroupServiceOfWeb.addGroupMember(gid, fid);
+                    String groupInfo = GroupServiceOfWeb.getGroupById(gid);
+
+                    //给新成员该群的信息
+                    ArrayList<String> singleMember = new ArrayList<>();
+                    singleMember.add(fid);
+                    noticeToAllGroupMembers(singleMember,"createGroupRes",groupInfo);
+                    //通知所有群成员，有新人加入；
+                    User friend = UserInfoService.fetchUserInfoById(fid);
+                    User user = UserInfoService.fetchUserInfoById(uid);
+                    ArrayList<String> groupMembersId = GroupServiceOfWeb.getGroupMembersId(gid);
+                    noticeToAllGroupMembers(groupMembersId,"pullMemberRes","{'mname':'"+friend.getName()+"','gid':'"+gid+"','uname':'"+user.getName()+"'}");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(success){
-                    res = "{'success':'yes'}";
-                }
-
-                byte[] bs = null;
-                bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
-                Message msg = new Message("sys_groups", from, "getGroupListOfUser", bs);
-                client.send(msg);
-
-            }else if (type.equals("delMemberFromGroup")) {
+            }else if (type.equals("delMember")) {
                 // 删除群成员；
                 String res = "{'success':'no'}";
 
                 try {
                     JSONObject jsonObject = new JSONObject(content);
-                    String fid = jsonObject.getString("fid");
-                    String groupid = jsonObject.getString("groupid");
+                    String mid = jsonObject.getString("mid");
+                    String uid = jsonObject.getString("uid");
+                    String groupid = jsonObject.getString("gid");
                     int gid = Integer.parseInt(groupid);
 
-                    res = GroupServiceOfWeb.deleteMember(gid, fid);
+
+                    res = GroupServiceOfWeb.deleteMember(gid, mid);
+                    //通知所有群成员，有人被删除；
+                    User user = UserInfoService.fetchUserInfoById(uid);
+                    User member = UserInfoService.fetchUserInfoById(mid);
+
+                    //得到新成员列表，通知他们张三被李四移除
+                    ArrayList<String> groupMembersId = GroupServiceOfWeb.getGroupMembersId(gid);
+                    noticeToAllGroupMembers(groupMembersId,"delMemberRes","{'uname':'"+user.getName()+"','gid':'"+gid+"','mname':'"+member.getName()+"'}");
+
+                    //通知被移除者本人
+                    ArrayList<String> memberSelf = new ArrayList<String>();
+                    memberSelf.add(mid);
+                    noticeToAllGroupMembers(memberSelf,"beDelMemberRes","{'gid':'"+gid+"'}");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                byte[] bs = null;
-                bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
-                Message msg = new Message("sys_groups", from, "delMemberFromGroup", bs);
-                client.send(msg);
 
             }else if (type.equals("modifyGroupName")) {
                 // 拉好友入群
@@ -217,115 +227,9 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                     String groupid = jsonObject.getString("groupid");
                     int gid = Integer.parseInt(groupid);
                     res  = GroupServiceOfWeb.modifyGroupName(gid,groupname );
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
-                byte[] bs = null;
-                bs = MySerializable.object_bytes(new JsonParser().parse(res).toString());
-                Message msg = new Message("sys_groups", from, "modifyGroupName", bs);
-                client.send(msg);
-            }else if (type.equals("pullMember")) {
-                // 用户进入群组后修改数据库
-                //********************************
-                try {
-                    JSONObject jsonObject = new JSONObject(content);
-                    String groupId = jsonObject.getString("gid");
-                    String groupName = jsonObject.getString("gname");
-                    String[] userids = jsonObject.getString("member").split("、");
-                    List<String> members = Arrays.asList(userids);
-                    Group group = new Group();
-                    group.setGid(groupId);
-                    group.setGname(groupName);
-                    group.setMembers(members);
-                    if (members != null) {
-                        for (String m : members) {
-                            Message msg = new Message("sys_group", m, "pullMemberRes", message.getContent());
-                            client.send(msg);
-                            System.out.println(msg);
-                        }
-                        // TODO 更新数据库
-                        GroupService.pullMember(group);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else if (type.equals("modifyGroupName")) {
-                // 修改群组名称
-                //*****************************
-                Group group = new Gson().fromJson(content, Group.class);
-                List<String> members = GroupService.getGroup(group.getGid()).getMembers();
-                if (members != null) {
-                    for (String m : members) {
-                        Message msg = new Message("sys_group", m, "modifyGroupNameRes", message.getContent());
-                        client.send(msg);
-                        System.out.println(msg);
-                    }
-                    // TODO 更新数据库
-                    GroupService.modifyGroupName(group);
-                }
-            } else if (type.equals("delMember")) {
-                //***************************
-                try {
-                    JSONObject jsonObject = new JSONObject(content);
-                    String groupName = jsonObject.getString("gname");
-                    String[] userids = jsonObject.getString("member").split("、");
-                    List<String> members = Arrays.asList(userids);
-                    Group group = new Group();
-                    group.setGname(groupName);
-                    group.setMembers(members);
-                    if (members != null) {
-                        for (String m : members) {
-                            Message msg = new Message("sys_group", m, "delMemberRes", message.getContent());
-                            client.send(msg);
-                            System.out.println(msg);
-                        }
-                        Message msg = new Message("sys_group", from, "delMemberRes", message.getContent());
-                        client.send(msg);
-                        System.out.println(msg);
-                        // TODO 更新数据库
-                        GroupService.delMember(group);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                // 删除成员，直接修改数据库，通知每个人
-//				Group group=new Gson().fromJson(content, Group.class);
-//				List<String> members=GroupService.getGroup(group.getGid()).getMembers();
-//				group.setMembers(members);
-//				if(members!=null){
-//					for(String m : members){
-//						Message msg = new Message("sys_group", m, "delMemberRes", message.getContent());
-//						client.send(msg);
-//					}
-//					// TODO 更新数据库
-//					GroupService.delMember(group);
-//				}
-            } else if (type.equals("quitGroup")) {
-                // 退群，修改数据库，通知每个人
-                //************************
-
-                try {
-                    JSONObject jsonObject = new JSONObject(content);
-                    String groupName = jsonObject.getString("gname");
-                    String[] userids = jsonObject.getString("member").split("、");
-                    List<String> members = Arrays.asList(userids);
-                    Group group = new Group();
-                    group.setGname(groupName);
-                    group.setMembers(members);
-                    //List<String> members=GroupService.getGroup(group.getGid()).getMembers();
-                    if (members != null) {
-                        for (String m : members) {
-                            Message msg = new Message("sys_group", m, "quitGroupRes", message.getContent());
-                            client.send(msg);
-                            System.out.println(msg);
-                        }
-                        Message msg = new Message("sys_group", from, "quitGroupRes", message.getContent());
-                        client.send(msg);
-                        System.out.println(msg);
-                        // TODO 更新数据库
-                        GroupService.quitGroup(group);
-                    }
+                    ArrayList<String> groupMembersId = GroupServiceOfWeb.getGroupMembersId(gid);
+                    noticeToAllGroupMembers(groupMembersId,"modifyGroupNameRes","{'gid':'"+gid+"','gname':'"+groupname+"'}");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

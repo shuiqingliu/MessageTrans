@@ -10,8 +10,18 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GroupServiceOfWeb {
+	//1-创建聊天群，并初始化群成员-createGroup;
+	//2-添加单个群组成员-addGroupMember
+	//3-加入多个群成员-addGroupMembers-用于建群；
+	//4-创建0成员群-doCreateGroup
+	//5-修改群名字；modifyGroupName
+	//6-获取id为x的群组；用于返回给即刻创建的诸位；getGroupById;
+	//7-删除群成员；deleteMember
+	//8-获取某id为x的用户所在的群组列表；getGroupListByUid
+	//9-获取id为x的群组的成员（要成员详细信息）；getGroupMembers
+	//10-获取id为x的群组的成员（只要成员id）
 
-    //创建聊天群
+    //1-创建聊天群
     public static String createGroup(String uid, List<String> members){
     	//创建原始群组
         int groupId = doCreateGroup(uid);
@@ -27,7 +37,7 @@ public class GroupServiceOfWeb {
 		return groupById;
     }
 
-	//添加单个群组成员
+	//2-添加单个群组成员
 	//member为欲添加成员id；
 	public static boolean addGroupMember(int groupId, String member){
         ArrayList<String> members = new ArrayList<>();
@@ -37,7 +47,7 @@ public class GroupServiceOfWeb {
     }
 
 
-	//加入多个群成员
+	//3-加入多个群成员
 	public static boolean addGroupMembers(int groupId,List<String> members){
         ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
         String sql = "INSERT INTO group_user(groupid, userid) VALUES(?,?)";
@@ -62,8 +72,7 @@ public class GroupServiceOfWeb {
     }
 
 
-	//创建群
-	//
+	//4-创建群
 	public static int doCreateGroup(String uid){
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
 		String sql = "INSERT INTO groups(groupname, manager) VALUES('"+uid + "-group', '"+uid + "')";
@@ -84,8 +93,7 @@ public class GroupServiceOfWeb {
         return 0;
     }
 
-	//创建群
-	//
+	//5-修改群名字
 	public static String modifyGroupName(int groupid, String groupname){
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
 		String sql = "UPDATE groups SET groupname=? WHERE groupid = ?";
@@ -106,8 +114,7 @@ public class GroupServiceOfWeb {
 		return res;
 	}
 
-    //获取id为x的群组；
-	//用于返回给即刻创建的诸位；
+    //6-获取id为x的群组；用于返回给即刻创建的诸位；
 	public static String getGroupById(int groupid){
 
 		String groupList = "";
@@ -146,7 +153,7 @@ public class GroupServiceOfWeb {
 	}
 
 
-	//删除群成员；
+	//7-删除群成员；
 	public static String deleteMember(int groupid,String fid){
 
 		String res = "{'success':'no'}";
@@ -171,8 +178,7 @@ public class GroupServiceOfWeb {
 		return  res;
 	}
 
-    //获取某id为x的用户所在的群组列表；
-	//
+    //8-获取某id为x的用户所在的群组列表；
     public static String getGroupListByUid(String uid){
 		String groupList = "";
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
@@ -210,6 +216,7 @@ public class GroupServiceOfWeb {
 		return "[" + groupList + "]";
 	}
 
+	//9-获取id为x的群组的成员；
 	public static String getGroupMembers(int gid){
 		String groupMembersList = "";
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
@@ -246,13 +253,32 @@ public class GroupServiceOfWeb {
 		}
 
 		return "[" + groupMembersList + "]";
-
 	}
+	//10-获取id为x的群组的成员（只要成员id）
+	public static ArrayList<String> getGroupMembersId(int gid){
+		ArrayList<String> ids = new ArrayList<>();
+		String groupMembersList = "";
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
+		String sql = "SELECT u.id as userid" +
+				" FROM group_user INNER JOIN user as u" +
+				" WHERE group_user.groupid = ?" +
+				" AND group_user.userid=u.id";
 
-
-
-
-
+		Connection connection = null;
+		try {
+			connection = connPool.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1,gid);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()){
+				String userid = resultSet.getString("userid");
+				ids.add(userid);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ids;
+	}
 
 
 
