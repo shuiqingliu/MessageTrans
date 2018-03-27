@@ -38,6 +38,7 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
         addListener("modifyGroupAvatar", new ResponseListener(this));
         addListener("modifyUserAvatar", new ResponseListener(this));
         addListener("searchFriendByName", new ResponseListener(this));
+        addListener("getGroupMembers", new ResponseListener(this));
     }
 
 
@@ -321,6 +322,23 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                     Gson gson=new Gson();
 
                     noticeToOne(from,"searchFriendByName",gson.toJson(users).toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if (type.equals("getGroupMembers")) {
+                // 更改群头像
+                String res = "{'success':'no'}";
+                boolean success =false;
+                try {
+                    JSONObject jsonObject = new JSONObject(content);
+                    String gid = jsonObject.getString("gid");
+                    String uid = jsonObject.getString("uid");
+
+                    int gidInt = Integer.parseInt(gid);
+                    String users = GroupServiceOfWeb.getGroupMembers(gidInt);
+                    Gson gson=new Gson();
+
+                    noticeToOne(from,"getGroupMembers",gson.toJson(users).toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
