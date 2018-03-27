@@ -338,7 +338,7 @@ public class GroupsClientOfWeb extends MessageServerTcpClient {
                     String users = GroupServiceOfWeb.getGroupMembers(gidInt);
                     Gson gson=new Gson();
 
-                    noticeToOne(from,"getGroupMembers",gson.toJson(users).toString());
+                    noticeToOne(from,"getGroupMembers",users);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
