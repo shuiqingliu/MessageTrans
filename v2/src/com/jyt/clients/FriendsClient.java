@@ -72,6 +72,17 @@ public class FriendsClient extends MessageServerTcpClient {
 					String fid=json.getString("id");
 					FriendsService fs=new FriendsService();
 					fs.delFri(from,fid);
+
+
+					bs = MySerializable.object_bytes(json.toString());
+					Message msg = new Message("sys_friend", from, "delFriRes", bs);
+					client.send(msg);
+
+					json.remove("id");
+					json.put("id",from);
+					bs = MySerializable.object_bytes(json.toString());
+					Message msg2 = new Message("sys_friend", fid, "delFriRes", bs);
+					client.send(msg2);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
