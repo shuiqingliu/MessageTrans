@@ -49,6 +49,7 @@ public class MessageForwarder extends MessageServerTcpClient {
                     ClientManager.getClientManager().sendMessage(to,forwardMessage);
                     //将 messageBean 转为 json 字符串
                     System.out.println("forwardMessage:" + forwardMessage);
+                    break;
                 case "msgGroup":
                     GroupMessage groupMessage = new MessageParser().getGroupMsgInfo(content);
                     for (String member : groupMessage.getGroupMembers()){
@@ -61,6 +62,7 @@ public class MessageForwarder extends MessageServerTcpClient {
                         //将 messageBean 转为 json 字符串
                         System.out.println("forwardMessage:" + forwardGroupMessage);
                     }
+                    break;
             }
 
             /*客户端列表去重

@@ -64,12 +64,13 @@ public class MessageHandler implements Runnable{
                         //打印发送的消息，并将暂存的消息置空
                         System.out.println("jsonData:" + jsonData.toString());
                         jsonData = new StringBuffer("");
+                        break;
                     case "msgGroup":
                         forwarder.send(createMessage(socketLine));
                         //打印发送的消息，并将暂存的消息置空
                         System.out.println("jsonData:" + jsonData.toString());
                         jsonData = new StringBuffer("");
-
+                        break;
                 }
             }
         } catch (IOException e) {
