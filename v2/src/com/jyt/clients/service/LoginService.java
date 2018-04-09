@@ -14,9 +14,10 @@ public class LoginService {
 	public static String isLoginSuccess(User user){
 		ConnectionPool connPool=ConnectionPoolUtils.GetPoolInstance();//����ģʽ�������ӳض���  
 		String sql="select * from user where name='"+user.getName()+"' and password='"+user.getPasswd()+"'";
+		Connection connection =null;
 		try {
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
+			connection = connPool.getConnection();
+			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			if(rs.next()){
 				return "{'success':'yes'," +
@@ -32,6 +33,8 @@ public class LoginService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "{'success':'no'}";
+		}finally {
+			connPool.returnConnection(connection);
 		}
 
 	}
