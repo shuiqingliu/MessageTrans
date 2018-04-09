@@ -29,7 +29,6 @@ public class MessageForwarder extends MessageServerTcpClient {
         @Override
         public void messagePerformed(Message message) {
             //根据 message 解析消息内容
-            String msgFormat = "#######\n%1, from %2 \n%3\n########";
             String msgTime = MyDate.f2(message.getCreated());
             String from = message.getFrom();
             String type=message.getType();
@@ -56,7 +55,7 @@ public class MessageForwarder extends MessageServerTcpClient {
                         System.out.println("Group 中 ID 为:"  + member);
                         messageBean.setTo(member);
                         System.out.println("发送的消息为: " + groupMessage.getMessageContent());
-                        messageBean.setContent(content);
+                        messageBean.setContent("{groupID:" + from+ "," + "content:" + content +"}");
                         String forwardGroupMessage = new MessageParser().messageToJson(messageBean);
                         ClientManager.getClientManager().sendMessage(member,forwardGroupMessage);
                         //将 messageBean 转为 json 字符串

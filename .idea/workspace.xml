@@ -9,7 +9,6 @@
     <list default="true" id="963b6d39-ebe4-4a22-bae5-d9a603912462" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MessageForwarder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MessageForwarder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MessageHandler.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,15 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MessageForwarder.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MessageForwarder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/MessageForwarder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="30" column="31" lean-forward="true" selection-start-line="30" selection-start-column="31" selection-end-line="30" selection-end-column="31" />
-              <folding>
-                <element signature="e#3294#3295#0" expanded="true" />
-                <element signature="e#3351#3352#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="435">
+              <caret line="54" column="70" lean-forward="true" selection-start-line="54" selection-start-column="70" selection-end-line="54" selection-end-column="70" />
             </state>
           </provider>
         </entry>
@@ -40,7 +35,7 @@
       <file leaf-file-name="MyDate.class" pinned="false" current-in-tab="false">
         <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/util/MyDate.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
+            <state relative-caret-position="851">
               <caret line="41" selection-start-line="41" selection-end-line="41" />
             </state>
           </provider>
@@ -49,7 +44,7 @@
       <file leaf-file-name="Message.class" pinned="false" current-in-tab="false">
         <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/message/Message.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
+            <state relative-caret-position="2116">
               <caret line="115" selection-start-line="115" selection-end-line="115" />
               <folding>
                 <element signature="e#3360#3361#0" expanded="true" />
@@ -61,23 +56,21 @@
       <file leaf-file-name="MessageServerTcpClient.class" pinned="false" current-in-tab="false">
         <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/message/MessageServerTcpClient.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="202" column="21" lean-forward="true" selection-start-line="202" selection-start-column="21" selection-end-line="202" selection-end-column="21" />
+            <state relative-caret-position="4232">
+              <caret line="202" column="21" selection-start-line="202" selection-start-column="21" selection-end-line="202" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MessageHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
-              <caret line="68" column="66" lean-forward="true" selection-start-line="68" selection-start-column="66" selection-end-line="68" selection-end-column="66" />
+            <state relative-caret-position="1380">
+              <caret line="68" column="66" selection-start-line="68" selection-start-column="66" selection-end-line="68" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#587#588#0" expanded="true" />
                 <element signature="e#623#624#0" expanded="true" />
-                <element signature="e#3584#3585#0" expanded="true" />
-                <element signature="e#3649#3650#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,7 +79,7 @@
       <file leaf-file-name="MessageForwardListener.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MessageForwardListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="506">
+            <state relative-caret-position="460">
               <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -98,8 +91,17 @@
       <file leaf-file-name="MessageParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MessageParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="736">
-              <caret line="35" column="39" selection-start-line="35" selection-start-column="24" selection-end-line="35" selection-end-column="39" />
+            <state relative-caret-position="529">
+              <caret line="36" column="70" selection-start-line="36" selection-start-column="70" selection-end-line="36" selection-end-column="70" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GroupMessage.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Bean/GroupMessage.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="161">
+              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -163,8 +165,8 @@
         <option value="$PROJECT_DIR$/src/Bean/MessageBean.java" />
         <option value="$PROJECT_DIR$/src/Bean/GroupMessage.java" />
         <option value="$PROJECT_DIR$/src/MessageParser.java" />
-        <option value="$PROJECT_DIR$/src/MessageForwarder.java" />
         <option value="$PROJECT_DIR$/src/MessageHandler.java" />
+        <option value="$PROJECT_DIR$/src/MessageForwarder.java" />
       </list>
     </option>
   </component>
@@ -178,8 +180,8 @@
     <servers />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="866" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="330" />
     <option name="y" value="23" />
     <option name="width" value="1920" />
     <option name="height" value="972" />
@@ -218,9 +220,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -264,6 +263,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -407,32 +409,32 @@
       <workItem from="1522667977670" duration="512000" />
       <workItem from="1522668674279" duration="2019000" />
       <workItem from="1522683350779" duration="201000" />
-      <workItem from="1523192812514" duration="3590000" />
+      <workItem from="1523192812514" duration="3987000" />
+      <workItem from="1523237351747" duration="299000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="150580000" />
+    <option name="totallyTimeSpent" value="151276000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="2560" height="972" extended-state="6" />
+    <frame x="330" y="23" width="1920" height="972" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.3605601" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.39084506" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.39084506" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3298122" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14694202" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19914803" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -440,6 +442,7 @@
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.25586855" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.3605601" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32982457" />
@@ -451,31 +454,31 @@
     </layout>
     <layout-to-restore>
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info id="Designer" order="3" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="7" />
+      <window_info anchor="right" id="Database" order="5" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32435596" />
       <window_info anchor="right" id="Theme Preview" order="8" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Messages" order="9" weight="0.36065573" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10087371" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
       <window_info id="Image Layers" order="5" />
-      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Application Servers" order="8" />
       <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.3793911" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="right" id="Database" order="5" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info anchor="bottom" id="Application Servers" order="8" />
+      <window_info anchor="bottom" id="Messages" order="9" weight="0.36065573" />
       <window_info anchor="right" id="Maven Projects" order="4" />
       <window_info id="Favorites" order="6" side_tool="true" />
     </layout-to-restore>
@@ -646,13 +649,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bean/GroupMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="38" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.2/gson-2.8.2.jar!/com/google/gson/GsonBuilder.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="943">
@@ -683,7 +679,7 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/message/Message.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
+        <state relative-caret-position="2116">
           <caret line="115" selection-start-line="115" selection-end-line="115" />
           <folding>
             <element signature="e#3360#3361#0" expanded="true" />
@@ -693,21 +689,21 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/util/MyDate.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
+        <state relative-caret-position="851">
           <caret line="41" selection-start-line="41" selection-end-line="41" />
         </state>
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/lib/WeTalkServer.jar!/com/jyt/message/MessageServerTcpClient.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="202" column="21" lean-forward="true" selection-start-line="202" selection-start-column="21" selection-end-line="202" selection-end-column="21" />
+        <state relative-caret-position="4232">
+          <caret line="202" column="21" selection-start-line="202" selection-start-column="21" selection-end-line="202" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/MessageForwardListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
+        <state relative-caret-position="460">
           <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -715,35 +711,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/MessageHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1380">
+          <caret line="68" column="66" selection-start-line="68" selection-start-column="66" selection-end-line="68" selection-end-column="66" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#587#588#0" expanded="true" />
+            <element signature="e#623#624#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Bean/GroupMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/MessageParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="736">
-          <caret line="35" column="39" selection-start-line="35" selection-start-column="24" selection-end-line="35" selection-end-column="39" />
+        <state relative-caret-position="529">
+          <caret line="36" column="70" selection-start-line="36" selection-start-column="70" selection-end-line="36" selection-end-column="70" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/MessageForwarder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="30" column="31" lean-forward="true" selection-start-line="30" selection-start-column="31" selection-end-line="30" selection-end-column="31" />
-          <folding>
-            <element signature="e#3294#3295#0" expanded="true" />
-            <element signature="e#3351#3352#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/MessageHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="68" column="66" lean-forward="true" selection-start-line="68" selection-start-column="66" selection-end-line="68" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#587#588#0" expanded="true" />
-            <element signature="e#623#624#0" expanded="true" />
-            <element signature="e#3584#3585#0" expanded="true" />
-            <element signature="e#3649#3650#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="435">
+          <caret line="54" column="70" lean-forward="true" selection-start-line="54" selection-start-column="70" selection-end-line="54" selection-end-column="70" />
         </state>
       </provider>
     </entry>
