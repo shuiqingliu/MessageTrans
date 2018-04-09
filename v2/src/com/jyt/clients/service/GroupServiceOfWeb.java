@@ -11,35 +11,35 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GroupServiceOfWeb {
-	//1-´´½¨ÁÄÌìÈº£¬²¢³õÊ¼»¯Èº³ÉÔ±-createGroup;
-	//2-Ìí¼Óµ¥¸öÈº×é³ÉÔ±-addGroupMember
-	//3-¼ÓÈë¶à¸öÈº³ÉÔ±-addGroupMembers-ÓÃÓÚ½¨Èº£»
-	//4-´´½¨0³ÉÔ±Èº-doCreateGroup
-	//5-ĞŞ¸ÄÈºÃû×Ö£»modifyGroupName
-	//6-»ñÈ¡idÎªxµÄÈº×é£»ÓÃÓÚ·µ»Ø¸ø¼´¿Ì´´½¨µÄÖîÎ»£»getGroupById;
-	//7-É¾³ıÈº³ÉÔ±£»deleteMember
-	//8-»ñÈ¡Ä³idÎªxµÄÓÃ»§ËùÔÚµÄÈº×éÁĞ±í£»getGroupListByUid
-	//9-»ñÈ¡idÎªxµÄÈº×éµÄ³ÉÔ±£¨Òª³ÉÔ±ÏêÏ¸ĞÅÏ¢£©£»getGroupMembers
-	//10-»ñÈ¡idÎªxµÄÈº×éµÄ³ÉÔ±£¨Ö»Òª³ÉÔ±id£©
+	//1-åˆ›å»ºèŠå¤©ç¾¤ï¼Œå¹¶åˆå§‹åŒ–ç¾¤æˆå‘˜-createGroup;
+	//2-æ·»åŠ å•ä¸ªç¾¤ç»„æˆå‘˜-addGroupMember
+	//3-åŠ å…¥å¤šä¸ªç¾¤æˆå‘˜-addGroupMembers-ç”¨äºå»ºç¾¤ï¼›
+	//4-åˆ›å»º0æˆå‘˜ç¾¤-doCreateGroup
+	//5-ä¿®æ”¹ç¾¤åå­—ï¼›modifyGroupName
+	//6-è·å–idä¸ºxçš„ç¾¤ç»„ï¼›ç”¨äºè¿”å›ç»™å³åˆ»åˆ›å»ºçš„è¯¸ä½ï¼›getGroupById;
+	//7-åˆ é™¤ç¾¤æˆå‘˜ï¼›deleteMember
+	//8-è·å–æŸidä¸ºxçš„ç”¨æˆ·æ‰€åœ¨çš„ç¾¤ç»„åˆ—è¡¨ï¼›getGroupListByUid
+	//9-è·å–idä¸ºxçš„ç¾¤ç»„çš„æˆå‘˜ï¼ˆè¦æˆå‘˜è¯¦ç»†ä¿¡æ¯ï¼‰ï¼›getGroupMembers
+	//10-è·å–idä¸ºxçš„ç¾¤ç»„çš„æˆå‘˜ï¼ˆåªè¦æˆå‘˜idï¼‰
 
-    //1-´´½¨ÁÄÌìÈº
+    //1-åˆ›å»ºèŠå¤©ç¾¤
     public static String createGroup(String uid, List<String> members){
-    	//´´½¨Ô­Ê¼Èº×é
+    	//åˆ›å»ºåŸå§‹ç¾¤ç»„
         int groupId = doCreateGroup(uid);
         if (groupId==0){
             return "{'success':'no'}";
         }
-        //Ìî³ä³ÉÔ±
+        //å¡«å……æˆå‘˜
         boolean success = addGroupMembers(groupId, members);
 
 
-        //·µ»ØĞÂ½¨ÈºĞÅÏ¢
+        //è¿”å›æ–°å»ºç¾¤ä¿¡æ¯
 		String groupById = getGroupById(groupId);
 		return groupById;
     }
 
-	//2-Ìí¼Óµ¥¸öÈº×é³ÉÔ±
-	//memberÎªÓûÌí¼Ó³ÉÔ±id£»
+	//2-æ·»åŠ å•ä¸ªç¾¤ç»„æˆå‘˜
+	//memberä¸ºæ¬²æ·»åŠ æˆå‘˜idï¼›
 	public static boolean addGroupMember(int groupId, String member){
         ArrayList<String> members = new ArrayList<>();
         members.add(member);
@@ -48,7 +48,7 @@ public class GroupServiceOfWeb {
     }
 
 
-	//3-¼ÓÈë¶à¸öÈº³ÉÔ±
+	//3-åŠ å…¥å¤šä¸ªç¾¤æˆå‘˜
 	public static boolean addGroupMembers(int groupId,List<String> members){
         ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
         String sql = "INSERT INTO group_user(groupid, userid) VALUES(?,?)";
@@ -77,9 +77,9 @@ public class GroupServiceOfWeb {
     }
 
 
-	//4-´´½¨Èº
+	//4-åˆ›å»ºç¾¤
 	public static int doCreateGroup(String uid){
-		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// µ¥ÀıÄ£Ê½´´½¨Á¬½Ó³Ø¶ÔÏó
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// å•ä¾‹æ¨¡å¼åˆ›å»ºè¿æ¥æ± å¯¹è±¡
 		String sql = "INSERT INTO groups(groupname, manager) VALUES('"+uid + "-group', '"+uid + "')";
         String sql2 = "SELECT LAST_INSERT_ID() AS value";
 		Connection connection =null;
@@ -101,9 +101,9 @@ public class GroupServiceOfWeb {
         return 0;
     }
 
-	//5-ĞŞ¸ÄÈºÃû×Ö
+	//5-ä¿®æ”¹ç¾¤åå­—
 	public static String modifyGroupName(int groupid, String groupname){
-		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// µ¥ÀıÄ£Ê½´´½¨Á¬½Ó³Ø¶ÔÏó
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// å•ä¾‹æ¨¡å¼åˆ›å»ºè¿æ¥æ± å¯¹è±¡
 		String sql = "UPDATE groups SET groupname=? WHERE groupid = ?";
 		Connection connection = null;
 		String res = "{'success':'no'}";
@@ -124,7 +124,7 @@ public class GroupServiceOfWeb {
 		return res;
 	}
 
-    //6-»ñÈ¡idÎªxµÄÈº×é£»ÓÃÓÚ·µ»Ø¸ø¼´¿Ì´´½¨µÄÖîÎ»£»
+    //6-è·å–idä¸ºxçš„ç¾¤ç»„ï¼›ç”¨äºè¿”å›ç»™å³åˆ»åˆ›å»ºçš„è¯¸ä½ï¼›
 	public static String getGroupById(int groupid){
 
 		String groupList = "";
@@ -165,7 +165,7 @@ public class GroupServiceOfWeb {
 	}
 
 
-	//7-É¾³ıÈº³ÉÔ±£»
+	//7-åˆ é™¤ç¾¤æˆå‘˜ï¼›
 	public static String deleteMember(int groupid,String fid){
 
 		String res = "{'success':'no'}";
@@ -192,7 +192,7 @@ public class GroupServiceOfWeb {
 		return  res;
 	}
 
-    //8-»ñÈ¡Ä³idÎªxµÄÓÃ»§ËùÔÚµÄÈº×éÁĞ±í£»
+    //8-è·å–æŸidä¸ºxçš„ç”¨æˆ·æ‰€åœ¨çš„ç¾¤ç»„åˆ—è¡¨ï¼›
     public static String getGroupListByUid(String uid){
 		String groupList = "";
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
@@ -232,7 +232,7 @@ public class GroupServiceOfWeb {
 		return "[" + groupList + "]";
 	}
 
-	//9-»ñÈ¡idÎªxµÄÈº×éµÄ³ÉÔ±£»
+	//9-è·å–idä¸ºxçš„ç¾¤ç»„çš„æˆå‘˜ï¼›
 	public static String getGroupMembers(int gid){
 		String groupMembersList = "";
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
@@ -273,7 +273,7 @@ public class GroupServiceOfWeb {
 		return "[" + groupMembersList + "]";
 	}
 
-	//10-»ñÈ¡idÎªxµÄÈº×éµÄ³ÉÔ±£¨Ö»Òª³ÉÔ±id,ÓÃÓÚÏòËûÃÇ·¢ÏûÏ¢£»£©
+	//10-è·å–idä¸ºxçš„ç¾¤ç»„çš„æˆå‘˜ï¼ˆåªè¦æˆå‘˜id,ç”¨äºå‘ä»–ä»¬å‘æ¶ˆæ¯ï¼›ï¼‰
 	public static ArrayList<String> getGroupMembersId(int gid){
 		ArrayList<String> ids = new ArrayList<>();
 		String groupMembersList = "";
@@ -301,9 +301,32 @@ public class GroupServiceOfWeb {
 		return ids;
 	}
 
-	//11-ĞŞ¸Ä¸öÈËÏñ
+		//11-ä¿®æ”¹ç¾¤å¤´åƒ
+	public static String modifyGroupAvatar(int groupid, String groupavatar){
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// å•ä¾‹æ¨¡å¼åˆ›å»ºè¿æ¥æ± å¯¹è±¡
+		String sql = "UPDATE groups SET groupavatar=? WHERE groupid = ?";
+		Connection connection = null;
+		String res = "{'success':'no'}";
+		try {
+			connection = connPool.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1,groupavatar);
+			preparedStatement.setInt(2,groupid);
+			int i = preparedStatement.executeUpdate();
+			if(i>0){
+				res ="{'success':'yes'}";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
+		}
+		return res;
+	}
+
+	//11-ä¿®æ”¹ä¸ªäººåƒ
 	public static String modifyUserAvatar(String uid, String useravatar){
-		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// µ¥ÀıÄ£Ê½´´½¨Á¬½Ó³Ø¶ÔÏó
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// å•ä¾‹æ¨¡å¼åˆ›å»ºè¿æ¥æ± å¯¹è±¡
 		String sql = "UPDATE user SET avatar = ? WHERE id = ?";
 		Connection connection = null;
 		String res = "{'success':'no'}";
@@ -325,7 +348,7 @@ public class GroupServiceOfWeb {
 		return res;
 	}
 
-	//12-¸ù¾İÃû×ÖËÑË÷ºÃÓÑ
+	//12-æ ¹æ®åå­—æœç´¢å¥½å‹
 	public static List<User> searchFriendByName(String searchName){
 
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
