@@ -13,10 +13,7 @@ import java.util.List;
 
 public class FriendsServiceOfWeb {
 
-	private Connection conn=null;
-	private PreparedStatement ps=null;
-	private ResultSet rs=null;
-
+	//1-
 	public static void addFri(String uid, String fid) {
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 		String sql1 = "INSERT INTO friends(uid, fid) VAlUES ('" + uid + "', '"
@@ -24,10 +21,10 @@ public class FriendsServiceOfWeb {
 		String sql2 = "INSERT INTO friends(uid, fid) VAlUES ('" + fid + "', '"
 				+ uid + "')";
 		String sql3="select * from friends where uid='"+uid+"'AND fid='"+fid+"'";
-
+		Connection connection =null;
 		try {
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
+			connection = connPool.getConnection();
+			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql3);
 			if(!rs.next()){
 				stmt.execute(sql1);
@@ -35,10 +32,13 @@ public class FriendsServiceOfWeb {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 
 	}
 
+	//2-
 	public static boolean delFri(String uid, String fid) {
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 
@@ -46,9 +46,10 @@ public class FriendsServiceOfWeb {
 				+ fid + "'";
 		String sql2 = "DELETE FROM friends WHERE uid = '" + fid + "' AND fid = '"
 				+ uid + "'";
+		Connection connection =null;
 		try {
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
+			connection = connPool.getConnection();
+			Statement stmt = connection.createStatement();
 			System.out.println(sql);
 			if (stmt.execute(sql) == false) {
 				return true;
@@ -57,16 +58,20 @@ public class FriendsServiceOfWeb {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			connPool.returnConnection(connection);
 		}
 	}
 
+	//3-
 	public static List<User> fetchFris(String uid){
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// ����ģʽ�������ӳض���
 		List<User> fris = new ArrayList<User>();
 		String sql = "SELECT * FROM friends WHERE uid='"+uid+"'";
+		Connection connection =null;
 		try {
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
+			connection = connPool.getConnection();
+			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				String fid=rs.getString("fid");
@@ -78,66 +83,40 @@ public class FriendsServiceOfWeb {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return fris;
+		}finally {
+			connPool.returnConnection(connection);
 		}
 	}
 
 	public static User findUser(String id) {
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 		String sql="SELECT * from user WHERE id ='"+id+"'";
-		Connection conn=null;
+		Connection connection=null;
 		Statement stmt=null;
 		ResultSet rs=null;
 		try {
-			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
-			conn = connPool.getConnection();
-			stmt = conn.createStatement();
+			connection = connPool.getConnection();
+			stmt = connection.createStatement();
 			rs=stmt.executeQuery(sql);
-			User user=new User();
+			User theUser=new User();
 			if(rs.next()){
-				user.setId(rs.getString("id"));
-				user.setName(rs.getString("name"));
-				user.setDepartment(rs.getString("department"));
-				user.setPhone(rs.getString("phone"));
-				user.setEmail(rs.getString("email"));
-				return user;
+				theUser.setId(rs.getString("id"));
+				theUser.setName(rs.getString("name"));
+				theUser.setPhone(rs.getString("phone"));
+				theUser.setEmail(rs.getString("email"));
+				theUser.setDepartment(rs.getString("department"));
+				return theUser;
 			} else{
 				return null;
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}finally {
-			try{
-				if(rs!=null){
-					rs.close();
-				}
-				if(stmt!=null){
-					stmt.close();
-				}
-				if(conn!=null){
-					conn.close();
-				}
-			} catch (Exception e){
-				e.printStackTrace();
-			}
+			connPool.returnConnection(connection);
 		}
 	}
 
-	private void close(){
-		try {
-			if(rs!=null){
-				rs.close();
-			}
-			if(ps!=null){
-				ps.close();
-			}
-			if(conn!=null){
-				conn.close();
-			}
-		}catch (Exception e){
-			e.printStackTrace();
-		}
 
-	}
 
 }

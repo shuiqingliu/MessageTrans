@@ -52,9 +52,10 @@ public class GroupServiceOfWeb {
 	public static boolean addGroupMembers(int groupId,List<String> members){
         ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
         String sql = "INSERT INTO group_user(groupid, userid) VALUES(?,?)";
+		Connection connection =null;
 
         try {
-            Connection connection = connPool.getConnection();
+            connection = connPool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             connection.setAutoCommit(false);
             for(String member:members){
@@ -65,11 +66,14 @@ public class GroupServiceOfWeb {
             preparedStatement.executeBatch();
             connection.commit();
             connection.setAutoCommit(true);
+            connPool.returnConnection(connection);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        return  false;
+        }finally {
+        	connPool.returnConnection(connection);
+		}
+		return  false;
     }
 
 
@@ -78,19 +82,22 @@ public class GroupServiceOfWeb {
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
 		String sql = "INSERT INTO groups(groupname, manager) VALUES('"+uid + "-group', '"+uid + "')";
         String sql2 = "SELECT LAST_INSERT_ID() AS value";
+		Connection connection =null;
 
         try {
-            Connection connection = connPool.getConnection();
+            connection = connPool.getConnection();
             Statement statement = connection.createStatement();
             int i = statement.executeUpdate(sql);
             ResultSet execute1 = statement.executeQuery(sql2);
             execute1.next();
             int groupId = execute1.getInt("value");
-            return groupId;
 
+            return groupId;
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }finally {
+			connPool.returnConnection(connection);
+		}
         return 0;
     }
 
@@ -111,6 +118,8 @@ public class GroupServiceOfWeb {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 		return res;
 	}
@@ -144,6 +153,8 @@ public class GroupServiceOfWeb {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 
 		if(groupList.equals("")) {
@@ -174,6 +185,8 @@ public class GroupServiceOfWeb {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 
 		return  res;
@@ -212,6 +225,8 @@ public class GroupServiceOfWeb {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 
 		return "[" + groupList + "]";
@@ -251,6 +266,8 @@ public class GroupServiceOfWeb {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 
 		return "[" + groupMembersList + "]";
@@ -278,29 +295,10 @@ public class GroupServiceOfWeb {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 		return ids;
-	}
-
-	//11-修改群头像
-	public static String modifyGroupAvatar(int groupid, String groupavatar){
-		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
-		String sql = "UPDATE groups SET groupavatar=? WHERE groupid = ?";
-		Connection connection = null;
-		String res = "{'success':'no'}";
-		try {
-			connection = connPool.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1,groupavatar);
-			preparedStatement.setInt(2,groupid);
-			int i = preparedStatement.executeUpdate();
-			if(i>0){
-				res ="{'success':'yes'}";
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return res;
 	}
 
 	//11-修改个人像
@@ -321,6 +319,8 @@ public class GroupServiceOfWeb {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 		return res;
 	}
@@ -332,10 +332,11 @@ public class GroupServiceOfWeb {
 		ArrayList<User> users = new ArrayList<>();
 
 		String sql = "select * from user where NAME LIKE '%"+searchName+"%'";
+		Connection connection =null;
 
 		try {
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
+			connection = connPool.getConnection();
+			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
@@ -352,6 +353,8 @@ public class GroupServiceOfWeb {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return users;
+		}finally {
+			connPool.returnConnection(connection);
 		}
 	}
 
