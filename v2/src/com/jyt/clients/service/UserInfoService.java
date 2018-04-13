@@ -40,22 +40,26 @@ public class UserInfoService {
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 		User user = new User();
 		String sql = "select * from user where id ='"+uid+"'";
+		Connection connection =null;
 		try {
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
+			connection = connPool.getConnection();
+			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next()) {
 				user.setId(rs.getString("id"));
 				user.setAvatar(rs.getString("avatar"));
 				user.setDepartment(rs.getString("department"));
-				user.setEmail(rs.getString("email"));
 				user.setName(rs.getString("name"));
 				user.setPhone(rs.getString("phone"));
+				user.setEmail(rs.getString("email"));
+
 			}
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return user;
+		}finally {
+			connPool.returnConnection(connection);
 		}
 	}
 
@@ -67,13 +71,17 @@ public class UserInfoService {
 				+ user.getEmail() + "' WHERE id='" + user.getId() + "'";*/
 
 		String sql="UPDATE user SET password ='"+ user.getPasswd() + "',email ='"+user.getEmail()+"',phone = '"+user.getPhone()+"'  where id='"+user.getId()+"'";
+		Connection connection =null;
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 		try {
-			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
-			Connection conn = connPool.getConnection();
-			Statement stmt = conn.createStatement();
+
+			connection = connPool.getConnection();
+			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			connPool.returnConnection(connection);
 		}
 	}
 

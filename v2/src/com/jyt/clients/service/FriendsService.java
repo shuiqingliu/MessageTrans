@@ -149,6 +149,7 @@ public class FriendsService {
 					User user=new User();
 					user.setId(rs.getString("id"));
 					user.setName(rs.getString("name"));
+					user.setAvatar(rs.getString("avatar"));
 					user.setDepartment(rs.getString("department"));
 					user.setPhone(rs.getString("phone"));
 					user.setEmail(rs.getString("email"));

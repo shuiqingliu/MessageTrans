@@ -10,14 +10,17 @@ public class ClientsManager extends MessageManager {
 	public ClientsManager(String server_ip, String server_name) {
 		super(server_ip, server_name);
 		manager.register("sys_login");
-		manager.register("sys_friends");
+		manager.register("sys_friend");
 		manager.register("sys_group");
 		manager.register("sys_userinfo");
 		manager.register("sys_search");
 		manager.register("sys_test");
 		manager.register("sys_check");
+		//webç»„æ–°æ·»åŠ çš„ä¸¤ä¸ªæ¨¡å—
+		manager.register("sys_groups");
+		manager.register("sys_friends");
 
-		// ×¢²áËùÓĞÓÃ»§
+		// ×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
 		List<String> uids = UserInfoService.getAllUsers();
 		for (String uid : uids) {
 			manager.register(uid);

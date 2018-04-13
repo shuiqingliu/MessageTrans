@@ -73,7 +73,7 @@ public class RemoteObjectClient {
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}	
+		}
 	}
 	
 	public TLV read_singling()
