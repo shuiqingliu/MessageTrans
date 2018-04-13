@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.jyt.clients.db.ConnectionPool;
@@ -20,40 +21,105 @@ public class GroupService {
 	public static Group getGroup(String gid) {
 		Group group = new Group();
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
-		String sql = "SELECT * FROM t_group WHERE group_id='" + gid + "'";
+
+        //System.out.println("fid: "+gid);
+		String sql = "SELECT * FROM group_user WHERE groupid='" + gid + "'";
+		String sql1 = "SELECT * FROM groups WHERE groupid='" + gid + "'";
+
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
-			if (rs.next()) {
-				String members=rs.getString("members");
-				String[] m=members.split("、");
-				group.setMembers(Arrays.asList(m));
-				return group;
-			} else {
-				return group;
+			List<String> m = new ArrayList<String>();
+				while (rs.next()) {
+
+					String userId = rs.getString("userid");
+					m.add(userId);
+				}
+			    group.setMembers(m);
+			    ResultSet rs1 = stmt.executeQuery(sql1);
+			    if (rs1.next()) {//rs.getString 之前要rs.next()
+					group.setUid(rs1.getString("manager"));
+					group.setGname(rs1.getString("groupname"));
+				}
+			conn.close();
+			stmt.close();
+			rs.close();
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return group;
+
+		}
+		return group;
+	}
+
+	public static Group getGroupByName(String gname) {
+		Group group = new Group();
+		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
+
+
+
+		String sql1 = "SELECT * FROM groups WHERE groupname='" + gname + "'";
+		try {
+			Connection conn = connPool.getConnection();
+			Statement stmt = conn.createStatement();
+
+
+			List<String> m = new ArrayList<String>();
+			ResultSet rs1 = stmt.executeQuery(sql1);
+			if (rs1.next()) {//rs.getString 之前要rs.next()
+				group.setGid(rs1.getString("groupid"));
+				group.setUid(rs1.getString("manager"));
+				group.setGname(rs1.getString("groupname"));
 			}
+			String sql = "SELECT * FROM group_user WHERE groupid='" + rs1.getString("groupid") + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+
+				String userId = rs.getString("userid");
+				m.add(userId);
+
+			}
+			group.setMembers(m);
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return group;
 		}
+		return group;
 	}
 
 	public static void createGroup(Group group) {
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();// 单例模式创建连接池对象
 		//String memstr = group.getUid();
 
-		List<String> members = group.getMembers();
-		String memstr = members.get(0);
-		for (String m : members) {
-			memstr += ("、" + m);
-		}
-		String sql = "INSERT INTO t_group VALUES('" + group.getGid() + "', '"
-				+ group.getGname() + "', '" + memstr + "')";
+
+		String sql = "INSERT INTO groups (groupname,groupavatar,manager) VALUES('" + group.getGname() + "', '" + group.getAvatar() + "', '"+ group.getUid()+"')";
+		String sql1 ="SELECT * FROM groups WHERE groupname='" + group.getGname() + "'";
+		String[] member= group.getMember().split("、");
+
+		List<String> members = Arrays.asList(member);
+
+//		String memstr = members.get(0);
+//		for (String m : members) {
+//			memstr += ("、" + m);
+//		}
 		try {
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
 			stmt.execute(sql);
+			ResultSet rs = stmt.executeQuery(sql1);
+			while (rs.next()) {
+
+				String gid = rs.getString("groupid");
+				group.setGid(gid);
+			}
+			for (String m:members){
+				stmt.execute("INSERT INTO group_user VALUES('" + group.getGid() + "', '" + m+"')");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,69 +127,75 @@ public class GroupService {
 
 	public static void pullMember(Group group) {
 		List<String> members = group.getMembers();
-		String memstr = "";
-		for (String m : members) {
-			memstr += (m + "、");
-		}
-		memstr += group.getMid();
-		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_id='"+group.getGid()+"'";
+//		String memstr = "";
+//		for (String m : members) {
+//			memstr += (m + "、");
+//		}
+//		memstr += group.getMid();
+		String sql = "INSERT INTO group_user VALUES('" + group.getGid() + "', '" + group.getMid() +"')";
 		try {
 			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
 			stmt.execute(sql);
+			conn.close();
+			stmt.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void modifyGroupName(Group group) {
-		String sql = "UPDATE t_group SET group_name='" + group.getGname() + "' WHERE group_id='"+group.getGid()+"'";
+		String sql = "UPDATE groups SET groupname='" + group.getGname() + "' WHERE groupid='"+group.getGid()+"'";
 		try {
 			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
 			stmt.execute(sql);
+			conn.close();
+			stmt.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+
 		}
 	}
 
 	public static void delMember(Group group) {
-		List<String> members = group.getMembers();
-		String memstr = "";
-		for (String m : members) {
-			if(!m.equals(group.getMid())){
-				memstr += (m + "、");
-			}	
-		}
-		memstr=memstr.substring(0, memstr.length() - 1);
-		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_id='"+group.getGid()+"'";
+		String gid = group.getGid();
+		String mid = group.getMid();
+		String sql = "DELETE FROM group_user WHERE groupid = '" + gid + "' AND userid = '" + mid + "'";
 		try {
 			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
 			stmt.execute(sql);
+			conn.close();
+			stmt.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void quitGroup(Group group) {
-		List<String> members = group.getMembers();
-		String memstr = "";
-		for (String m : members) {
-			if(!m.equals(group.getUid())){
-				memstr += (m + "、");
-			}	
-		}
-		memstr=memstr.substring(0, memstr.length() - 1);
-		String sql = "UPDATE t_group SET members='" + memstr + "' WHERE group_name='"+group.getGname()+"'";
+		//List<String> members = group.getMembers();
+		//String memstr = "";
+//		for (String m : members) {
+//			if(!m.equals(group.getUid())){
+//				memstr += (m + "、");
+//			}
+//		}
+		//memstr=memstr.substring(0, memstr.length() - 1);
+		String gid = group.getGid();
+		String mid = group.getMid();
+		String sql = "DELETE FROM group_user WHERE groupid = '" + gid + "' AND userid = '" + mid + "'";
 		try {
 			ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
 			Connection conn = connPool.getConnection();
 			Statement stmt = conn.createStatement();
 			stmt.execute(sql);
+			conn.close();
+			stmt.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -131,8 +203,10 @@ public class GroupService {
 
 	public List<Group> pullGroup(String id){
 		ConnectionPool connPool = ConnectionPoolUtils.GetPoolInstance();
-		String sql1="select group_id from t_group";
-		String sql2="select * from t_group where group_id=? limit 1";
+		String sql1="select groupid from groups";
+		String sql2="select * from groups where groupid=? limit 1";
+
+
 		List<Group> list=new ArrayList<>();
 		try {
 			conn = connPool.getConnection();
@@ -140,38 +214,50 @@ public class GroupService {
 			rs=ps.executeQuery();
 			List<String> groupidList=new ArrayList<>();
 			int i=0;
-			System.out.println(rs.toString());
+			//System.out.println(rs.toString());
 			while(rs.next()){
-				groupidList.add(rs.getString("group_id"));
+
+				groupidList.add(rs.getString("groupid"));
 			}
 
+			int num = 0;
 			for (String fid:groupidList) {
 				ps = conn.prepareStatement(sql2);
 				ps.setString(1,fid);
 				rs=ps.executeQuery();
 
 
+
+
 				if(rs.next()){
-					String[] groupList = rs.getString("members").split("、");
-					List<String> groupMemberList=Arrays.asList(groupList);
+					num++;
+					System.out.println("num: "+num);
+					Group groupMembers = getGroup(fid);
+//					String[] groupList = rs.getString("members").split("、");
+//					List<String> groupMemberList=Arrays.asList(groupList);
+					List<String> groupMemberList=groupMembers.getMembers();
+					String groupMemberListString =groupMembers.getUid();
+					for (String m:groupMemberList){
+						if (m.equals(groupMembers.getUid())) {
+							continue;
+						}
+						groupMemberListString=groupMemberListString+"、"+m;
+
+					}
+
 					if (groupMemberList.contains(id)) {
 						Group group = new Group();
-						group.setGid(rs.getString("group_id"));
-						group.setGname(rs.getString("group_name"));
-						group.setMember(rs.getString("members"));
+						group.setGid(rs.getString("groupid"));
+						group.setGname(rs.getString("groupname"));
+						group.setMember(groupMemberListString);
 						list.add(group);
-//					User user=new User();
-//					user.setId(rs.getString("id"));
-//					user.setName(rs.getString("name"));
-//					user.setDepartment(rs.getString("department"));
-//					user.setPhone(rs.getString("phone"));
-//					user.setEmail(rs.getString("email"));
-//
-//					list.add(user);
 					}
 				}
+
 			}
-		} catch (Exception e) {
+
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			this.close();
