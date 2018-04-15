@@ -7,6 +7,7 @@ public class Group {
 	private String gid;  //群组id
 	private String uid;  //群管理员id
 	private String gname;  //群名称
+    private String avatar;  //群头像
 	private String mid;  //加群或退群的用户的id
 	private List<String> members;  //群里所有用户的id
 	private String member;
@@ -68,4 +69,12 @@ public class Group {
 	public void setMember(String member) {
 		this.member = member;
 	}
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }
