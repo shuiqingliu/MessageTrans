@@ -20,6 +20,9 @@ public class ClientsManager extends MessageManager {
 		manager.register("sys_groups");
 		manager.register("sys_friends");
 
+		//iOS add model
+		manager.register("sys_forward");
+
 		// ע�������û�
 		List<String> uids = UserInfoService.getAllUsers();
 		for (String uid : uids) {

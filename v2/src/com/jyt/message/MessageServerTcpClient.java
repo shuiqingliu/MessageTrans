@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.jyt.clients.db.ConnectionPool;
 import com.jyt.clients.db.ConnectionPoolUtils;
@@ -423,6 +424,7 @@ public class MessageServerTcpClient implements Runnable {
 			String sql = "INSERT INTO message VALUES('" + message.getFrom() + "', '"
 					+ message.getTo() + "', '" + message.getType() + "','"+df.format(now)+"','"+(String) MySerializable.bytes_object(message
 							.getContent())+"')";
+			TimeUnit.SECONDS.sleep(5);//√Î
 			try {
 				Connection conn = connPool.getConnection();
 				Statement stmt = conn.createStatement();
