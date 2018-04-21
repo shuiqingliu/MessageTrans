@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 **/classes
 .DS_Store
 .DS_Store?
@@ -18,3 +19,6 @@ bin/
 out
 .idea
 target
+=======
+out
+>>>>>>> 58c06e6343330e708d646fee57f03754a583a2b9
